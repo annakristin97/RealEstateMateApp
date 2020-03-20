@@ -37,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
     private Forecast mForecast;
-    private double latitude = 64;
-    private double longitude = -21;
+    private double latitude = 20;
+    private double longitude = -31;
 
 
     @BindView(R.id.timeLabel)
@@ -66,8 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
         mProgressBar.setVisibility(View.INVISIBLE);
 
-
-
         mRefreshImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,6 +74,24 @@ public class MainActivity extends AppCompatActivity {
         });
 
         getForecast(latitude, longitude);
+
+    }
+
+    private void getProperties() throws IOException {
+
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url("https://10.0.2.2:8080/seeall")
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+
+            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+            System.out.println(response.body().string());
+        }
+
     }
 
 
