@@ -69,33 +69,75 @@ public class MainActivity extends AppCompatActivity {
         mRefreshImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getForecast(latitude, longitude);
+                getProperties();
             }
         });
 
-        getForecast(latitude, longitude);
-
     }
 
-    private void getProperties() throws IOException {
+    //"http://10.0.2.2:9090/seeall"
+    private void getProperties() {
+        System.out.println("Við erum hér");
 
-        OkHttpClient client = new OkHttpClient();
+        if(isNetworkAvailable()) {
+            toggleRefresh();
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url("http://10.0.2.2:9090/seeAll")
+                    .build();
 
-        Request request = new Request.Builder()
-                .url("https://10.0.2.2:8080/seeall")
-                .build();
+            Call call = client.newCall(request);
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            toggleRefresh();
+                        }
+                    });
+                    alertUserAboutError();
+                }
 
-        try (Response response = client.newCall(request).execute()) {
-
-            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-
-            System.out.println(response.body().string());
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            toggleRefresh();
+                        }
+                    });
+                    try {
+                        String jsonData = response.body().string();
+                        Log.v(TAG, jsonData);
+                        if (response.isSuccessful()) {
+                            //We are not on main thread
+                            //Need to call this method and pass a new Runnable thread
+                            //to be able to update the view.
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Call the method to update the view.
+                                    updateDisplay();
+                                }
+                            });
+                        } else {
+                            alertUserAboutError();
+                        }
+                    } catch (IOException e) {
+                        Log.e(TAG, "Exception caught: ", e);
+                    }
+                }
+            });
+        }
+        else {
+            Toast.makeText(this, R.string.network_unavailable_message, Toast.LENGTH_LONG).show();
         }
 
     }
 
 
-    private void getForecast(double lat, double lon) {
+    /*private void getForecast(double lat, double lon) {
         String apiKey = "a6bcdd96c91df987a3833e64d05b5987";
         String forecastUrl = "https://api.darksky.net/forecast/"+
                 apiKey +"/"+ lat +","+ lon;
@@ -157,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
         else {
             Toast.makeText(this, R.string.network_unavailable_message, Toast.LENGTH_LONG).show();
         }
-    }
+    }*/
 
     private void toggleRefresh() {
         if(mProgressBar.getVisibility()== View.INVISIBLE){
