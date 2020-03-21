@@ -11,6 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +46,10 @@ public class PropertyAdapter extends ArrayAdapter<Property> {
         TextView release = (TextView) listItem.findViewById(R.id.textView_release);
         release.setText(String.valueOf(currentProperty.getPrice()));
 
+        ImageView propertyImage = (ImageView) listItem.findViewById(R.id.imageView_property);
+        String imageId = currentProperty.getImage1(); //Get image id of current property
+        String url = "http://10.0.2.2:9090/Image/" + imageId;
+        Picasso.get().load(url).into(propertyImage); //Loadar mynd inn a imageView
         return listItem;
     }
 }
