@@ -16,5 +16,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Eignarsíða" />
+
+        <ImageView
+            android:id="@+id/image1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
     </LinearLayout>
 </RelativeLayout>

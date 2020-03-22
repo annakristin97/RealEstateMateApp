@@ -87,7 +87,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void openPropertyPage(Property property) {
         Intent intent =new Intent(this, EignActivity.class);
-        intent.putExtra("PropertyObject", property);
+        intent.putExtra("propertyName", property.getStreetName());
+        intent.putExtra("image1",property.getImage1());
         startActivity(intent);
     }
 
