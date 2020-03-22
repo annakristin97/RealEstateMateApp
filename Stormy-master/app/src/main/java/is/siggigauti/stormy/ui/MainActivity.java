@@ -1,6 +1,7 @@
 package is.siggigauti.stormy.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -21,7 +23,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -66,7 +70,25 @@ public class MainActivity extends AppCompatActivity {
         });
 
         getProperties();
+        mPropertyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                System.out.println("Ýtt á eign");
+                List<Property> PropertyList = mFilteredProperties.getProperties();
+                Property property = PropertyList.get(i);
+                System.out.println(property.streetName);
+                openPropertyPage(property);
 
+
+            }
+        });
+
+    }
+
+    private void openPropertyPage(Property property) {
+        Intent intent =new Intent(this, EignActivity.class);
+        intent.putExtra("PropertyObject", property);
+        startActivity(intent);
     }
 
     //"http://10.0.2.2:9090/seeall"
