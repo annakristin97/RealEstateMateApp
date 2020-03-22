@@ -1,6 +1,7 @@
 package is.siggigauti.stormy.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,6 +28,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import is.siggigauti.stormy.R;
+import is.siggigauti.stormy.ui.login.LoginActivity;
 import is.siggigauti.stormy.weather.FilteredProperties;
 import is.siggigauti.stormy.weather.Forecast;
 import is.siggigauti.stormy.weather.Property;
@@ -40,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
     private FilteredProperties mFilteredProperties;
     private PropertyAdapter mAdapter;
+    private LoginActivity LoginActivity;
 
     @BindView(R.id.summaryLabel)
     TextView mSummaryLabel;
@@ -49,12 +53,17 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar mProgressBar;
     @BindView(R.id.propertyList)
     ListView mPropertyList;
+    @BindView(R.id.linkToLoginButton)
+    Button linkToLoginButton;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
 
         mProgressBar.setVisibility(View.INVISIBLE);
 
@@ -67,6 +76,19 @@ public class MainActivity extends AppCompatActivity {
 
         getProperties();
 
+        linkToLoginButton = (Button) findViewById(R.id.linkToLoginButton);
+        linkToLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openLoginPage();
+            }
+        });
+
+    }
+
+    private void openLoginPage() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 
     //"http://10.0.2.2:9090/seeall"
