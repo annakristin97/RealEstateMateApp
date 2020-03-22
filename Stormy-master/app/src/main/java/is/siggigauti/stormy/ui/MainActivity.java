@@ -69,7 +69,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         mProgressBar.setVisibility(View.INVISIBLE);
-
+        linkToLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openLoginPage();
+            }
+        });
         mFilterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
