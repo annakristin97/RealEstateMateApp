@@ -1,46 +1,51 @@
 package is.siggigauti.stormy.ui.login;
 
-import android.app.Activity;
-import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import is.siggigauti.stormy.R;
+import is.siggigauti.stormy.SignUpActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
-    private EditText  userName;
+    private EditText userName;
     private EditText userPassword;
+    private Button signUpButton;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
         userName = (EditText) findViewById(R.id.userName_input);
         userPassword = (EditText) findViewById(R.id.userPassword_input);
+        Button signUpButton = (Button) findViewById(R.id.loginButton);
+        //Button signUpButton = (Button) findViewById(R.id.signUpButton);
 
-        final Button loginButton =(Button) findViewById(R.id.login);
-        final ProgressBar loadingProgressBar = (ProgressBar) findViewById(R.id.loading);
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openSignUpPage();
+                System.out.println("Ýtt var á signup");
+            }
+        });
 
-        loginViewModel.getLoginFormState().observe((LifecycleOwner) this, new Observer<LoginFormState>() {
+
+
+
+        /*
+        loginViewModel.getLoginFormState().observe( this, new Observer<LoginFormState>() {
             @Override
             public void onChanged(@Nullable LoginFormState loginFormState) {
                 if (loginFormState == null) {
@@ -125,5 +130,12 @@ public class LoginActivity extends AppCompatActivity {
 
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+    }
+    */
+    }
+
+    private void openSignUpPage() {
+        Intent intent = new Intent(this, SignUpActivity.class);
+        startActivity(intent);
     }
 }

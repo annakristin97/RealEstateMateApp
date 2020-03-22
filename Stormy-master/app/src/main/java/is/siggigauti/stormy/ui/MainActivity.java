@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
     private FilteredProperties mFilteredProperties;
     private PropertyAdapter mAdapter;
-    private LoginActivity LoginActivity;
+    //private LoginActivity LoginActivity;
 
     @BindView(R.id.summaryLabel)
     TextView mSummaryLabel;
@@ -81,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 openLoginPage();
+                System.out.println("Þú ýttir á login");
             }
         });
 
