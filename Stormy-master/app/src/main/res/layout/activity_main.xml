@@ -8,6 +8,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
+    android:id="@+id/container"
     tools:context=".ui.MainActivity">
 
     <LinearLayout
@@ -22,6 +23,13 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
+
+            <Button
+                android:id="@+id/filterButton"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="Filters" />
 
             <TextView
                 android:id="@+id/propertyListHeader"

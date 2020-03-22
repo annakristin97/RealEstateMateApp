@@ -2,16 +2,15 @@ package is.siggigauti.stormy.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -23,7 +22,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +29,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import is.siggigauti.stormy.R;
 import is.siggigauti.stormy.weather.FilteredProperties;
-import is.siggigauti.stormy.weather.Forecast;
 import is.siggigauti.stormy.weather.Property;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -53,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar mProgressBar;
     @BindView(R.id.propertyList)
     ListView mPropertyList;
+    @BindView(R.id.filterButton)
+    Button mFilterButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +60,15 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         mProgressBar.setVisibility(View.INVISIBLE);
+
+        mFilterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getSupportFragmentManager();
+                FilterFragment fragment =  new FilterFragment();
+                fm.beginTransaction().replace(R.id.container, fragment).commit();
+            }
+        });
 
         mRefreshImageView.setOnClickListener(new View.OnClickListener() {
             @Override
