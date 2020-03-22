@@ -2,6 +2,7 @@ package is.siggigauti.stormy.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.app.FragmentManager;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -28,6 +30,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import is.siggigauti.stormy.R;
+import is.siggigauti.stormy.ui.login.LoginActivity;
 import is.siggigauti.stormy.weather.FilteredProperties;
 import is.siggigauti.stormy.weather.Property;
 import okhttp3.Call;
@@ -41,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
     private FilteredProperties mFilteredProperties;
     private PropertyAdapter mAdapter;
+    //private LoginActivity LoginActivity;
 
     @BindView(R.id.summaryLabel)
     TextView mSummaryLabel;
@@ -52,12 +56,17 @@ public class MainActivity extends AppCompatActivity {
     ListView mPropertyList;
     @BindView(R.id.filterButton)
     Button mFilterButton;
+    @BindView(R.id.linkToLoginButton)
+    Button linkToLoginButton;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
 
         mProgressBar.setVisibility(View.INVISIBLE);
 
@@ -97,6 +106,19 @@ public class MainActivity extends AppCompatActivity {
         Intent intent =new Intent(this, EignActivity.class);
         intent.putExtra("propertyName", property.getStreetName());
         intent.putExtra("image1",property.getImage1());
+        linkToLoginButton = (Button) findViewById(R.id.linkToLoginButton);
+        linkToLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openLoginPage();
+                System.out.println("Þú ýttir á login");
+            }
+        });
+
+    }
+
+    private void openLoginPage() {
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 
