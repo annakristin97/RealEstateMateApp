@@ -2,7 +2,6 @@ package is.siggigauti.stormy.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.app.FragmentManager;
@@ -11,7 +10,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -33,11 +31,9 @@ import is.siggigauti.stormy.R;
 import is.siggigauti.stormy.ui.login.LoginActivity;
 import is.siggigauti.stormy.weather.FilteredProperties;
 import is.siggigauti.stormy.weather.Property;
-import is.siggigauti.stormy.weather.PropertyFilterRequestWrapper;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
-import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -132,13 +128,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getFilteredProperties(String town, String zip, String bedrooms, String price, String size, String category, String bathrooms) {
-        System.out.println("Halló");
-
-        System.out.println(town);
-
-        if(isNetworkAvailable()) {
             toggleRefresh();
-            OkHttpClient client = new OkHttpClient();
 
             RequestBody formBody = new FormBody.Builder()
                     .add("town", town)
@@ -155,6 +145,22 @@ public class MainActivity extends AppCompatActivity {
                     .post(formBody)
                     .build();
 
+            callBackend(request);
+    }
+
+    public void getProperties() {
+            toggleRefresh();
+            Request request = new Request.Builder()
+                    .url("http://10.0.2.2:9090/seeAll")
+                    .build();
+
+            callBackend(request);
+    }
+
+    private void callBackend(Request request){
+            OkHttpClient client = new OkHttpClient();
+
+        if(isNetworkAvailable()) {
             Call call = client.newCall(request);
             call.enqueue(new Callback() {
                 @Override
@@ -197,69 +203,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
-        }
-        else {
+        } else {
             Toast.makeText(this, R.string.network_unavailable_message, Toast.LENGTH_LONG).show();
         }
-    }
-
-    public void getProperties() {
-        System.out.println("Við erum hér");
-
-        if(isNetworkAvailable()) {
-            toggleRefresh();
-            OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder()
-                    .url("http://10.0.2.2:9090/seeAll")
-                    .build();
-
-            Call call = client.newCall(request);
-            call.enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            toggleRefresh();
-                        }
-                    });
-                    alertUserAboutError();
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            toggleRefresh();
-                        }
-                    });
-                    try {
-                        String jsonData = response.body().string();
-                        Log.v(TAG, jsonData);
-                        if (response.isSuccessful()) {
-                            mFilteredProperties = parsePropertyListDetails(jsonData);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    updateDisplay();
-                                }
-                            });
-                        } else {
-                            alertUserAboutError();
-                        }
-                    } catch (IOException e) {
-                        Log.e(TAG, "Exception caught: ", e);
-                    } catch (JSONException e) {
-                    Log.e(TAG, "JSON caught: ", e);
-                    }
-                }
-            });
         }
-        else {
-            Toast.makeText(this, R.string.network_unavailable_message, Toast.LENGTH_LONG).show();
-        }
-    }
 
     private void toggleRefresh() {
         if(mProgressBar.getVisibility()== View.INVISIBLE){

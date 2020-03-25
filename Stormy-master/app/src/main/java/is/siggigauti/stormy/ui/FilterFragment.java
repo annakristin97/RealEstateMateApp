@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import is.siggigauti.stormy.R;
-import is.siggigauti.stormy.weather.PropertyFilterRequestWrapper;
 
 public class FilterFragment extends Fragment {
 
@@ -37,15 +36,6 @@ public class FilterFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 System.out.println("Smellt á search");
-                PropertyFilterRequestWrapper pfrw = new PropertyFilterRequestWrapper(
-                        mTownFilter.getSelectedItem().toString(),
-                        mZipFilter.getSelectedItem().toString(),
-                        mBedroomsFilter.getSelectedItem().toString(),
-                        mPriceFilter.getSelectedItem().toString(),
-                        mSizeFilter.getSelectedItem().toString(),
-                        mCategoryFilter.getSelectedItem().toString(),
-                        mBathroomsFilter.getSelectedItem().toString()
-                );
                 MainActivity activity = (MainActivity) getActivity();
                 activity.getFilteredProperties(
                         mTownFilter.getSelectedItem().toString(),
