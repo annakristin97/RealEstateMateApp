@@ -30,10 +30,14 @@ import butterknife.ButterKnife;
 import is.siggigauti.stormy.R;
 import is.siggigauti.stormy.weather.FilteredProperties;
 import is.siggigauti.stormy.weather.Property;
+import is.siggigauti.stormy.weather.PropertyFilterRequestWrapper;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
@@ -100,8 +104,79 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    //"http://10.0.2.2:9090/seeall"
-    private void getProperties() {
+    public void getFilteredProperties(String town, String zip, String bedrooms, String price, String size, String category, String bathrooms) {
+        System.out.println("Halló");
+
+        System.out.println(town);
+
+        if(isNetworkAvailable()) {
+            toggleRefresh();
+            OkHttpClient client = new OkHttpClient();
+
+            RequestBody formBody = new FormBody.Builder()
+                    .add("town", town)
+                    .add("zip", zip)
+                    .add("bedrooms", bedrooms)
+                    .add("price", price)
+                    .add("size", size)
+                    .add("category", category)
+                    .add("bathrooms", bathrooms)
+                    .build();
+
+            Request request = new Request.Builder()
+                    .url("http://10.0.2.2:9090/search")
+                    .post(formBody)
+                    .build();
+
+            Call call = client.newCall(request);
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            toggleRefresh();
+                        }
+                    });
+                    alertUserAboutError();
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            toggleRefresh();
+                        }
+                    });
+                    try {
+                        String jsonData = response.body().string();
+                        Log.v(TAG, jsonData);
+                        if (response.isSuccessful()) {
+                            mFilteredProperties = parsePropertyListDetails(jsonData);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    updateDisplay();
+                                }
+                            });
+                        } else {
+                            alertUserAboutError();
+                        }
+                    } catch (IOException e) {
+                        Log.e(TAG, "Exception caught: ", e);
+                    } catch (JSONException e) {
+                        Log.e(TAG, "JSON caught: ", e);
+                    }
+                }
+            });
+        }
+        else {
+            Toast.makeText(this, R.string.network_unavailable_message, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void getProperties() {
         System.out.println("Við erum hér");
 
         if(isNetworkAvailable()) {
@@ -157,7 +232,6 @@ public class MainActivity extends AppCompatActivity {
         else {
             Toast.makeText(this, R.string.network_unavailable_message, Toast.LENGTH_LONG).show();
         }
-
     }
 
     private void toggleRefresh() {
