@@ -141,7 +141,7 @@
         android:layout_margin="20dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:background="@color/colorAccent"
+        android:background="#bf4554"
         android:text="@android:string/search_go"
         android:textColor="@android:color/background_light" />
 </LinearLayout>
