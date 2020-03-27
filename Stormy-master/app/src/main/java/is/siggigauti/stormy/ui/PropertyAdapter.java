@@ -41,10 +41,13 @@ public class PropertyAdapter extends ArrayAdapter<Property> {
         Property currentProperty = propertiesList.get(position);
 
         TextView name = (TextView) listItem.findViewById(R.id.textView_name);
-        name.setText(currentProperty.getStreetName());
+        name.setText(currentProperty.getStreetName() + " " + currentProperty.getStreetNumber());
 
-        TextView release = (TextView) listItem.findViewById(R.id.textView_release);
-        release.setText(String.valueOf(currentProperty.getPrice()));
+        TextView size = (TextView) listItem.findViewById(R.id.textView_size);
+        size.setText(String.valueOf(currentProperty.getPropertySize()) + "m2");
+
+        TextView price = (TextView) listItem.findViewById(R.id.textView_price);
+        price.setText(String.valueOf(currentProperty.getPrice()/1000000) + " mil.");
 
         ImageView propertyImage = (ImageView) listItem.findViewById(R.id.imageView_property);
         String imageId = currentProperty.getImage1(); //Get image id of current property
