@@ -119,6 +119,9 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("rooms", property.getRooms());
         intent.putExtra("type", property.getCategory());
         intent.putExtra("image1",property.getImage1());
+        intent.putExtra("image2",property.getImage2());
+        intent.putExtra("image3",property.getImage3());
+
         startActivity(intent);
 
     }

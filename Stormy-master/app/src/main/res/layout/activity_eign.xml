@@ -38,6 +38,14 @@
             android:textSize="24sp"
             android:layout_marginLeft="10dp"/>
 
+        <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/view_pager"
+            android:layout_width="600dp"
+            android:layout_height="200dp"
+            tools:context="is.siggigauti.stormy.ui.EignActivity"/>
+
         <ImageView
             android:id="@+id/image1"
             android:layout_width="match_parent"
