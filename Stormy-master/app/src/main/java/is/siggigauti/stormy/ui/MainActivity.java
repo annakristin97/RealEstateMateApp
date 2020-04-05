@@ -111,6 +111,12 @@ public class MainActivity extends AppCompatActivity {
         Intent intent =new Intent(this, EignActivity.class);
         intent.putExtra("propertyName", property.getStreetName());
         intent.putExtra("image1",property.getImage1());
+        startActivity(intent);
+
+    }
+
+    private void openLoginPage() {
+        Intent intent = new Intent(this, LoginActivity.class);
         linkToLoginButton = (Button) findViewById(R.id.linkToLoginButton);
         linkToLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,11 +125,6 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Þú ýttir á login");
             }
         });
-
-    }
-
-    private void openLoginPage() {
-        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 
