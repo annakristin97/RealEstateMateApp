@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -45,13 +44,6 @@ public class MainActivity extends AppCompatActivity {
     private FilteredProperties mFilteredProperties;
     private PropertyAdapter mAdapter;
     //private LoginActivity LoginActivity;
-
-    @BindView(R.id.summaryLabel)
-    TextView mSummaryLabel;
-    @BindView(R.id.refreshImageView)
-    ImageView mRefreshImageView;
-    @BindView(R.id.progressBar)
-    ProgressBar mProgressBar;
     @BindView(R.id.propertyList)
     ListView mPropertyList;
     @BindView(R.id.filterButton)
@@ -67,8 +59,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-
-        mProgressBar.setVisibility(View.INVISIBLE);
         linkToLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,13 +71,6 @@ public class MainActivity extends AppCompatActivity {
                 FragmentManager fm = getSupportFragmentManager();
                 FilterFragment fragment =  new FilterFragment();
                 fm.beginTransaction().replace(R.id.container, fragment).commit();
-            }
-        });
-
-        mRefreshImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getProperties();
             }
         });
 
@@ -140,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getFilteredProperties(String town, String zip, String bedrooms, String price, String size, String category, String bathrooms) {
-            toggleRefresh();
 
             RequestBody formBody = new FormBody.Builder()
                     .add("town", town)
@@ -161,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getProperties() {
-            toggleRefresh();
             Request request = new Request.Builder()
                     .url("http://10.0.2.2:9090/seeAll")
                     .build();
@@ -180,7 +161,6 @@ public class MainActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            toggleRefresh();
                         }
                     });
                     alertUserAboutError();
@@ -191,7 +171,6 @@ public class MainActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            toggleRefresh();
                         }
                     });
                     try {
@@ -219,17 +198,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.network_unavailable_message, Toast.LENGTH_LONG).show();
         }
         }
-
-    private void toggleRefresh() {
-        if(mProgressBar.getVisibility()== View.INVISIBLE){
-            mProgressBar.setVisibility(View.VISIBLE);
-            mRefreshImageView.setVisibility(View.INVISIBLE);
-        }
-        else {
-            mRefreshImageView.setVisibility(View.VISIBLE);
-            mProgressBar.setVisibility(View.INVISIBLE);
-        }
-    }
 
     private void updateDisplay() {
         mAdapter = new PropertyAdapter(this, mFilteredProperties.getProperties());

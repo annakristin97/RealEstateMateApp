@@ -20,7 +20,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="712dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -71,31 +71,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="465dp"
                 android:layout_weight="1" />
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp" />
-
-            <TextView
-                android:id="@+id/summaryLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center_horizontal"
-                android:text="Getting properties..."
-                android:textColor="#FFFFFFFF"
-                android:textSize="18dp" />
-
-            <ImageView
-                android:id="@+id/refreshImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:srcCompat="@mipmap/refresh" />
 
         </LinearLayout>
 
