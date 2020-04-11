@@ -11,8 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -82,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 List<Property> PropertyList = mFilteredProperties.getProperties();
                 Property property = PropertyList.get(i);
                 System.out.println(property.streetName);
+               // System.out.println(property.getPropertyID());
                 openPropertyPage(property);
 
 
@@ -91,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openPropertyPage(Property property) {
-        Intent intent =new Intent(this, EignActivity.class);
+        Intent intent =new Intent(this, PropertyActivity.class);
         intent.putExtra("propertyName", property.getStreetName());
         intent.putExtra("propertyNumber", property.getStreetNumber());
         intent.putExtra("prize", property.getPrice());
@@ -104,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("image1",property.getImage1());
         intent.putExtra("image2",property.getImage2());
         intent.putExtra("image3",property.getImage3());
+        intent.putExtra("propertyID",property.getPropertyID());
 
         startActivity(intent);
 

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.MakeOfferFragment"
+    android:animationCache="false"
+    android:background="@color/colorExtra2">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="444dp"
+        android:orientation="vertical"
+        android:paddingLeft="24dp"
+        android:paddingTop="56dp"
+        android:paddingRight="24dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="36sp">
+
+        <TextView
+            android:id="@+id/MakeOfferTItle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Make Offer on this property"
+            android:textColor="@color/colorText"
+            android:textSize="36sp" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/OfferAmount"
+            android:layout_width="match_parent"
+            android:layout_height="126dp">
+
+            <EditText
+                android:id="@+id/input_offer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Offer Amount"
+                android:inputType="text"
+                android:textColor="@color/colorText"
+                android:textColorHighlight="@color/colorText"
+                android:textColorLink="@color/colorText"
+                android:textCursorDrawable="@color/colorText" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/makeOfferButtonID"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:background="@color/colorButton"
+            android:text="Make offer"
+            android:textColor="@color/colorText"
+            android:visibility="visible"
+            tools:visibility="visible" />
+
+    </LinearLayout>
+
+
+</FrameLayout>
