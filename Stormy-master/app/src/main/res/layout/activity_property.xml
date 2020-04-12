@@ -31,15 +31,7 @@
             android:text="Postalcode"
             android:textSize="24sp"
             android:layout_marginLeft="10dp"
-            android:textColor="@color/colorText"/>
-
-        <TextView
-            android:id="@+id/prize"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="prize"
-            android:textSize="24sp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="30dp"
             android:textColor="@color/colorText"/>
 
         <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
@@ -50,21 +42,15 @@
             android:layout_height="200dp"
             tools:context="is.siggigauti.stormy.ui.PropertyActivity"/>
 
-        <ImageView
-            android:id="@+id/image1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:srcCompat="@tools:sample/backgrounds/scenic"
-            android:layout_marginTop="20dp"/>
 
         <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="102dp"
             android:layout_margin="20dp">
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
 
                 <TextView
@@ -72,85 +58,94 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Size : "
-                    android:textColor="@color/colorText"/>
+                    android:textColor="@color/colorText" />
 
                 <TextView
                     android:id="@+id/sizetext"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="sizetext"
-                    android:textColor="@color/colorText"/>
+                    android:textColor="@color/colorText" />
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/Rooms"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Rooms : "
-                    android:textColor="@color/colorText"/>
+                    android:textColor="@color/colorText" />
+
                 <TextView
                     android:id="@+id/roomstext"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="roomstext"
-                    android:textColor="@color/colorText"/>
+                    android:textColor="@color/colorText" />
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/bathrooms"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Bathrooms : "
-                    android:textColor="@color/colorText"/>
+                    android:textColor="@color/colorText" />
+
                 <TextView
                     android:id="@+id/bathroomstext"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="bathroomstext"
-                    android:textColor="@color/colorText"/>
+                    android:textColor="@color/colorText" />
             </TableRow>
 
             <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_width="277dp"
+                android:layout_height="34dp">
 
                 <TextView
                     android:id="@+id/type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Type : "
-                    android:textColor="@color/colorText"/>
+                    android:textColor="@color/colorText" />
 
                 <TextView
                     android:id="@+id/typetext"
                     android:layout_width="wrap_content"
-                    android:layout_height="183dp"
+                    android:layout_height="match_parent"
                     android:text="typetext"
-                    android:textColor="@color/colorText"/>
-            </TableRow>
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-
-                <Button
-                    android:id="@+id/makeOfferButton"
-                    android:layout_width="100dp"
-                    android:layout_height="40dp"
-                    android:background="@color/colorButton"
-                    android:text="Make Offer"
-                    android:textColor="@color/colorText"
-                    android:visibility="visible"
-                    tools:visibility="visible" />
+                    android:textColor="@color/colorText" />
             </TableRow>
         </TableLayout>
+
+        <TextView
+            android:id="@+id/prize"
+            android:layout_width="246dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:text="prize"
+            android:textColor="@color/colorText"
+            android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/makeOfferButton"
+            android:layout_width="148dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="50dp"
+            android:background="@color/colorButton"
+            android:text="Make Offer"
+            android:textColor="@color/colorText"
+            android:visibility="visible"
+            tools:visibility="visible" />
 
 
     </LinearLayout>

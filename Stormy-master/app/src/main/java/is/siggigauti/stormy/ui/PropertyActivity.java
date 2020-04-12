@@ -45,6 +45,7 @@ public class PropertyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_property);
         ButterKnife.bind(this);
 
+
         String imageId1 = (String) getIntent().getSerializableExtra("image1");
         String url1 = "http://10.0.2.2:9090/Image/" + imageId1;
         String imageId2 = (String) getIntent().getSerializableExtra("image2");
@@ -62,6 +63,7 @@ public class PropertyActivity extends AppCompatActivity {
         String propertyName = (String) getIntent().getSerializableExtra("propertyName");
         String propertyNumber = (String) getIntent().getSerializableExtra("propertyNumber");
         Long prize =  (Long) getIntent().getSerializableExtra("prize");
+
         System.out.println(prize);
         String streetName = propertyName + " " + propertyNumber;
         System.out.println(propertyName);
@@ -70,9 +72,11 @@ public class PropertyActivity extends AppCompatActivity {
 
         Long zip =  (Long) getIntent().getSerializableExtra("zip");
         String town = (String) getIntent().getSerializableExtra("town");
+
         String postal = zip + " " + town;
         TextView postalcode = (TextView) findViewById(R.id.postalcode);
         postalcode.setText(postal);
+
         String prizet = prize.toString()+" kr." ;
         TextView prizetext = (TextView) findViewById(R.id.prize);
         prizetext.setText(prizet);
