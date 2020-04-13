@@ -4,15 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -27,6 +27,7 @@ import butterknife.ButterKnife;
 import is.siggigauti.stormy.R;
 import is.siggigauti.stormy.weather.FilteredProperties;
 import is.siggigauti.stormy.weather.Property;
+import is.siggigauti.stormy.ui.LoginActivity;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -75,15 +76,15 @@ public class MainActivity extends AppCompatActivity {
         linkToLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openLoginPage();
                 System.out.println("Þú ýttir á login");
+                openLoginPage();
             }
         });
 
     }
 
     private void openLoginPage() {
-        Intent intent = new Intent(this, is.siggigauti.stormy.ui.login.LoginActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 
