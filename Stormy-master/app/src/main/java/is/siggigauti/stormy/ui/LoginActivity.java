@@ -11,11 +11,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import is.siggigauti.stormy.R;
-import is.siggigauti.stormy.SignUpActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private LoginViewModel loginViewModel;
     private EditText userName;
     private EditText userPassword;
     private Button signUpButton;
@@ -26,8 +24,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
-                .get(LoginViewModel.class);
         userName = (EditText) findViewById(R.id.userName_input);
         userPassword = (EditText) findViewById(R.id.userPassword_input);
         Button signUpButton = (Button) findViewById(R.id.loginButton);
@@ -36,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openSignUpPage();
+                //openSignUpPage();
                 System.out.println("Ýtt var á signup");
             }
         });
@@ -134,8 +130,9 @@ public class LoginActivity extends AppCompatActivity {
     */
     }
 
+    /*
     private void openSignUpPage() {
         Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
-    }
+    } */
 }
