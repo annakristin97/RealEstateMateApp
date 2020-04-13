@@ -1,20 +1,35 @@
 package is.siggigauti.stormy.ui;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.Random;
 
 import butterknife.BindView;
 import is.siggigauti.stormy.R;
 import is.siggigauti.stormy.weather.Offer;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +41,7 @@ public class MakeOfferFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    public static final String TAG = MakeOfferFragment.class.getSimpleName();
 
     //@BindView(R.id.OfferAmount)
     //EditText input_offer;
@@ -83,12 +99,14 @@ public class MakeOfferFragment extends Fragment {
                 Random rand = new Random();
                 int offerID = rand.nextInt(1000);
                 int userID= rand.nextInt(1000);
-
+                String of = offerID +" ";
+                String us = userID +"";
                 System.out.println(offerAmount.getEditText().getText().toString());
                 String u=offerAmount.getEditText().getText().toString();
-                long upph = Long.parseLong(u);
 
-                Offer offer = new Offer(offerID,propertyID,upph,userID);
+
+                SaveOffer(of,propertyIDdata,u,us);
+                //Offer offer = new Offer(offerID,propertyID,u,userID);
 
                 closeFragment();
             }});
@@ -97,4 +115,38 @@ public class MakeOfferFragment extends Fragment {
         public void closeFragment() {
             getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
         }
+
+        /*Kallar á fallið SaveOffer2 í bakenda */
+        public void SaveOffer(String offerID,String propertyID,String upph,String userID){
+            System.out.println(propertyID);
+            System.out.println(upph);
+            RequestBody formBody = new FormBody.Builder()
+                    .add("offerID", offerID)
+                    .add("pid", propertyID)
+                    .add("offerAmount", upph)
+                    .build();
+
+            Request request = new Request.Builder()
+                    .url("http://10.0.2.2:9090/SaveOffer2")
+                    .post(formBody)
+                    .build();
+
+            OkHttpClient client = new OkHttpClient();
+            Call call = client.newCall(request);
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    System.out.println("bilad");
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    System.out.println("vrikar");
+                }
+            });
+        }
+
+    private boolean isNetworkAvailable() {
+        return true;
+    }
 }
