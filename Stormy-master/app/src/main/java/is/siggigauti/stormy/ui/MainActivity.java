@@ -11,9 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -45,13 +42,6 @@ public class MainActivity extends AppCompatActivity {
     private FilteredProperties mFilteredProperties;
     private PropertyAdapter mAdapter;
     //private LoginActivity LoginActivity;
-
-    @BindView(R.id.summaryLabel)
-    TextView mSummaryLabel;
-    @BindView(R.id.refreshImageView)
-    ImageView mRefreshImageView;
-    @BindView(R.id.progressBar)
-    ProgressBar mProgressBar;
     @BindView(R.id.propertyList)
     ListView mPropertyList;
     @BindView(R.id.filterButton)
@@ -67,8 +57,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-
-        mProgressBar.setVisibility(View.INVISIBLE);
         linkToLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,13 +72,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mRefreshImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getProperties();
-            }
-        });
-
         getProperties();
         mPropertyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -99,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 List<Property> PropertyList = mFilteredProperties.getProperties();
                 Property property = PropertyList.get(i);
                 System.out.println(property.streetName);
+               // System.out.println(property.getPropertyID());
                 openPropertyPage(property);
 
 
@@ -108,9 +90,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openPropertyPage(Property property) {
-        Intent intent =new Intent(this, EignActivity.class);
+        Intent intent =new Intent(this, PropertyActivity.class);
         intent.putExtra("propertyName", property.getStreetName());
+        intent.putExtra("propertyNumber", property.getStreetNumber());
+        intent.putExtra("prize", property.getPrice());
+        intent.putExtra("zip", property.getZip());
+        intent.putExtra("town", property.getTown());
+        intent.putExtra("size", property.getPropertySize());
+        intent.putExtra("bathrooms", property.getBathrooms());
+        intent.putExtra("rooms", property.getRooms());
+        intent.putExtra("type", property.getCategory());
         intent.putExtra("image1",property.getImage1());
+        intent.putExtra("image2",property.getImage2());
+        intent.putExtra("image3",property.getImage3());
+        intent.putExtra("propertyID",property.getPropertyID());
+
+        startActivity(intent);
+
+    }
+
+    private void openLoginPage() {
+        Intent intent = new Intent(this, LoginActivity.class);
         linkToLoginButton = (Button) findViewById(R.id.linkToLoginButton);
         linkToLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,16 +119,10 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Þú ýttir á login");
             }
         });
-
-    }
-
-    private void openLoginPage() {
-        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 
     public void getFilteredProperties(String town, String zip, String bedrooms, String price, String size, String category, String bathrooms) {
-            toggleRefresh();
 
             RequestBody formBody = new FormBody.Builder()
                     .add("town", town)
@@ -149,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getProperties() {
-            toggleRefresh();
             Request request = new Request.Builder()
                     .url("http://10.0.2.2:9090/seeAll")
                     .build();
@@ -168,7 +161,6 @@ public class MainActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            toggleRefresh();
                         }
                     });
                     alertUserAboutError();
@@ -179,7 +171,6 @@ public class MainActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            toggleRefresh();
                         }
                     });
                     try {
@@ -207,17 +198,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.network_unavailable_message, Toast.LENGTH_LONG).show();
         }
         }
-
-    private void toggleRefresh() {
-        if(mProgressBar.getVisibility()== View.INVISIBLE){
-            mProgressBar.setVisibility(View.VISIBLE);
-            mRefreshImageView.setVisibility(View.INVISIBLE);
-        }
-        else {
-            mRefreshImageView.setVisibility(View.VISIBLE);
-            mProgressBar.setVisibility(View.INVISIBLE);
-        }
-    }
 
     private void updateDisplay() {
         mAdapter = new PropertyAdapter(this, mFilteredProperties.getProperties());

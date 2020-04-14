@@ -4,7 +4,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#8fa0ba"
+    android:background="@color/colorBackground"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -12,90 +12,86 @@
     tools:context=".ui.MainActivity">
 
     <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="374dp"
-        android:layout_height="705dp"
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+        android:clipChildren="false"
+        android:orientation="horizontal"
+        android:background="@color/colorBackground">
+
+        <Button
+            android:id="@+id/propertiesButton"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:layout_gravity="start"
+            android:background="@color/colorExtra2"
+            android:text="Properties"
+            android:textColor="@color/colorText" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/linkToLoginButton"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:layout_gravity="start"
+            android:background="@color/colorBackground"
+            android:text="Login"
+            android:textColor="@color/colorText" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/homepageButton"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:background="@color/colorBackground"
+            android:text="My Page"
+            android:textColor="@color/colorText" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="360dp"
+        android:layout_height="615dp"
+        android:layout_marginTop="60dp"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="712dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/linearLayout2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:clipChildren="false"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/linkToLoginButton"
-                    android:layout_width="100dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="start"
-                    android:background="#bf4554"
-                    android:text="Login"
-                    android:textColor="@android:color/background_light" />
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <Button
                     android:id="@+id/filterButton"
-                    android:layout_width="100dp"
+                    android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:background="#bf4554"
+                    android:background="@color/colorButton"
+                    android:layout_gravity="center"
                     android:text="Filters"
-                    android:textColor="@android:color/background_light" />
+                    android:textColor="@color/colorText" />
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/propertyListHeader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:text="Properties"
-                android:textColor="@android:color/white"
-                android:textSize="30sp" />
 
             <ListView
                 android:id="@+id/propertyList"
                 android:layout_width="match_parent"
-                android:layout_height="465dp"
+                android:layout_height="373dp"
                 android:layout_weight="1" />
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp" />
-
-            <TextView
-                android:id="@+id/summaryLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center_horizontal"
-                android:text="Getting properties..."
-                android:textColor="#FFFFFFFF"
-                android:textSize="18dp" />
-
-            <ImageView
-                android:id="@+id/refreshImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:srcCompat="@mipmap/refresh" />
 
         </LinearLayout>
 

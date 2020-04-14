@@ -3,8 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animationCache="false"
-    android:background="#E6375c80"
+    android:background="@color/colorExtra2"
     android:orientation="vertical">
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
 
     <TextView
         android:id="@+id/townFilterLabel"
@@ -13,7 +18,7 @@
         android:layout_marginLeft="15dp"
         android:layout_marginTop="10dp"
         android:text="Town:"
-        android:textColor="@android:color/background_light"
+        android:textColor="@color/colorText"
         android:textSize="16sp" />
 
     <Spinner
@@ -25,6 +30,10 @@
         android:layout_marginBottom="10dp"
         android:entries="@array/townFilterItems" />
 
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
 
     <TextView
         android:id="@+id/zipFilterLabel"
@@ -42,7 +51,12 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginBottom="10dp"
-        android:entries="@array/zipFilterItems" />/>
+        android:entries="@array/zipFilterItems" />
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
 
     <TextView
         android:id="@+id/bedroomsFilterLabel"
@@ -60,7 +74,12 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginBottom="10dp"
-        android:entries="@array/bedroomsFilterItems" />/>
+        android:entries="@array/bedroomsFilterItems" />
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
 
     <TextView
         android:id="@+id/priceFilterLabel"
@@ -78,7 +97,12 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginBottom="10dp"
-        android:entries="@array/priceFilterItems" />/>
+        android:entries="@array/priceFilterItems" />
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
 
     <TextView
         android:id="@+id/sizeFilterLabel"
@@ -96,7 +120,12 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginBottom="10dp"
-        android:entries="@array/sizeFilterItems" />/>
+        android:entries="@array/sizeFilterItems" />
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
 
     <TextView
         android:id="@+id/categoryFilterLabel"
@@ -114,7 +143,12 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginBottom="10dp"
-        android:entries="@array/categoryFilterItems" />/>
+        android:entries="@array/categoryFilterItems" />
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
 
     <TextView
         android:id="@+id/bathroomsFilterLabel"
@@ -132,16 +166,26 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginBottom="10dp"
-        android:entries="@array/bathroomsFilterItems" />/>
+        android:entries="@array/bathroomsFilterItems" />
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
 
     <Button
         android:id="@+id/searchButton"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="40dp"
         android:layout_margin="20dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:background="#bf4554"
+        android:background="@color/colorButton"
         android:text="@android:string/search_go"
-        android:textColor="@android:color/background_light" />
+        android:textColor="@color/colorText" />
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
 </LinearLayout>
