@@ -24,17 +24,18 @@ public class User {
         this.userEmail = userEmail;
     }
 
-    public static String getUserEmail() {
-        return userEmail;
-    }
 
     public String getUserName() {
         return userName;
     }
 
-    public static String getUserPassword() {
+    public String getUserPassword() {
         return userPassword;
     }
+    public String getUserEmail() {
+        return userEmail;
+    }
+
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;

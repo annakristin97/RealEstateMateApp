@@ -1,5 +1,8 @@
 package is.siggigauti.stormy.ui;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,9 +33,9 @@ public class SignUpActivity extends AppCompatActivity {
 
     private EditText userEmail;
     private EditText userName;
-    private EditText password;
     private EditText rePassword;
     private MainActivity mainActivity;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,21 +46,34 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButton = (Button) findViewById(R.id.signUpButton);
         userName = (EditText) findViewById(R.id.input_name);
         userEmail = (EditText) findViewById(R.id.input_email);
+        EditText password = (EditText) findViewById(R.id.input_password);
         password = (EditText) findViewById(R.id.input_password);
         rePassword = (EditText) findViewById(R.id.input_reEnterPassword);
+
+        final EditText finalPassword = password;
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(finalPassword != rePassword) {
+
+                }
 
             System.out.println("Smellt á Búa til aðgang");
             String username = userName.getText().toString();
-            String password = userName.getText().toString();
-            String email = userName.getText().toString();
+            String email = userEmail.getText().toString();
+            String rePass = rePassword.getText().toString();
+            System.out.println("username:"+ username);
+            System.out.println("email:"+ email);
+            System.out.println("password:"+ rePass);
+            User Nyrnotandi = new User();
 
-            System.out.println(username + " " + password + " " + email);
-            //System.out.println(exists);
+            Nyrnotandi.setUserEmail(email);
+            Nyrnotandi.setUserName(username);
+            Nyrnotandi.setUserPassword(rePass);
 
-            SaveUser(username,email,password);
+            SaveUser(Nyrnotandi);
+
+            // Búið að búa til account og notandi fluttur yfir á login page
             goToLoginPage();
 
             }
@@ -67,22 +83,28 @@ public class SignUpActivity extends AppCompatActivity {
         );
     }
 
-    public void SaveUser(String userName, String userEmail, String password){
+    private void SaveUser(User nyrnotandi) {
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Býr til notanda fyrir þig");
+        progressDialog.show();
+        String URL_DATA = "http://10.0.2.2:9090/saveUser";
+        System.out.println(URL_DATA);
 
         RequestBody formBody = new FormBody.Builder()
-                .add("UserName", userName)
-                .add("UserPassWord", password)
-                .add("UserEmail", userEmail)
+                .add("userEmail", nyrnotandi.getUserEmail())
+                .add("userName", nyrnotandi.getUserName())
+                .add("userPassword", nyrnotandi.getUserPassword())
                 .build();
 
         Request request = new Request.Builder()
-                .url("http://10.0.2.2:9090/signup")
+                .url(URL_DATA)
                 .post(formBody)
                 .build();
 
         OkHttpClient client = new OkHttpClient();
         Call call = client.newCall(request);
         call.enqueue(new Callback() {
+
             @Override
             public void onFailure(Call call, IOException e) {
                 System.out.print("Villa");
@@ -90,16 +112,45 @@ public class SignUpActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                System.out.print("Positvie");
+                System.out.print("Positive");
             }
         });
     }
+
+
+    /*
+        public void SaveUser(User user){
+
+            RequestBody formBody = new FormBody.Builder()
+                    .add("userEmail", userEmail)
+                    .add("userName", userName)
+                    .add("userPassword", password)
+                    .build();
+            Request request = new Request.Builder()
+                    .url("http://10.0.2.2:9090/saveUser")
+                    .post(formBody)
+                    .build();
+
+            OkHttpClient client = new OkHttpClient();
+            Call call = client.newCall(request);
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    System.out.print("Villa");
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    System.out.print("Positive");
+                }
+            });
+        }
+
+     */
     private void goToLoginPage() {
         System.out.println("Notandi fluttur yfir á login page");
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
-        //mainActivity.getUsers();
-
     }
 }
 
