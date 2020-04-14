@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void getUsers() {
         Request request = new Request.Builder()
-                .url("http://10.0.2.2:9090/users")
+                .url("http://10.0.2.2:9090/getAllUsers")
                 .build();
 
         callBackend(request);

@@ -9,10 +9,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import is.siggigauti.stormy.R;
+import is.siggigauti.stormy.weather.Property;
+import is.siggigauti.stormy.weather.User;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -29,6 +32,7 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText userName;
     private EditText password;
     private EditText rePassword;
+    private MainActivity mainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +48,14 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
             System.out.println("Smellt á Búa til aðgang");
             String username = userName.getText().toString();
             String password = userName.getText().toString();
             String email = userName.getText().toString();
 
             System.out.println(username + " " + password + " " + email);
+            //System.out.println(exists);
 
             SaveUser(username,email,password);
             goToLoginPage();
@@ -79,12 +85,12 @@ public class SignUpActivity extends AppCompatActivity {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                System.out.print(e);
+                System.out.print("Villa");
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                System.out.print(response);
+                System.out.print("Positvie");
             }
         });
     }
