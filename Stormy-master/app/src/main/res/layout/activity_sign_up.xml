@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
-    tools:context=".ui.SignUpActivity">
+    tools:context=".ui.SignUpActivity"
+    android:id = "@+id/signupcontainer">
 
     <LinearLayout
         android:orientation="vertical"
@@ -25,7 +26,7 @@
                 android:id="@+id/input_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Nafn"
+                android:hint="Notendanafn"
                 android:inputType="textPersonName" />
         </android.support.design.widget.TextInputLayout>
 
@@ -35,13 +36,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp">
-
-            <EditText
-                android:id="@+id/input_address"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Heimilisfang"
-                android:inputType="textPostalAddress" />
         </android.support.design.widget.TextInputLayout>
 
 
@@ -101,7 +95,7 @@
 
         <!-- Signup Button -->
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btn_signup"
+            android:id="@+id/signUpButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -110,4 +104,4 @@
             android:text="Búa til aðgang" />
 
     </LinearLayout>
-</ScrollView>
+</FrameLayout>

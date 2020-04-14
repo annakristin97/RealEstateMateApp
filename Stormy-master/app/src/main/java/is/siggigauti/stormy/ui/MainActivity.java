@@ -25,7 +25,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import is.siggigauti.stormy.R;
-import is.siggigauti.stormy.ui.login.LoginActivity;
 import is.siggigauti.stormy.weather.FilteredProperties;
 import is.siggigauti.stormy.weather.Property;
 import okhttp3.Call;
@@ -150,6 +149,14 @@ public class MainActivity extends AppCompatActivity {
             callBackend(request);
     }
 
+    public void getUsers() {
+        Request request = new Request.Builder()
+                .url("http://10.0.2.2:9090/users")
+                .build();
+
+        callBackend(request);
+    }
+
     private void callBackend(Request request){
             OkHttpClient client = new OkHttpClient();
 
@@ -197,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, R.string.network_unavailable_message, Toast.LENGTH_LONG).show();
         }
-        }
+    }
 
     private void updateDisplay() {
         mAdapter = new PropertyAdapter(this, mFilteredProperties.getProperties());
