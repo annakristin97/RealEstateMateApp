@@ -48,7 +48,8 @@ public class MainActivity extends AppCompatActivity {
     Button mFilterButton;
     @BindView(R.id.linkToLoginButton)
     Button linkToLoginButton;
-
+    @BindView(R.id.aboutButton)
+    Button aboutButton;
 
 
     @Override
@@ -61,6 +62,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 openLoginPage();
+            }
+        });
+        aboutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+                startActivity(intent);
             }
         });
         mFilterButton.setOnClickListener(new View.OnClickListener() {
@@ -82,8 +90,6 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println(property.streetName);
                // System.out.println(property.getPropertyID());
                 openPropertyPage(property);
-
-
             }
         });
 
