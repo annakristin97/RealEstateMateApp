@@ -1,23 +1,18 @@
 package is.siggigauti.stormy.ui;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import java.io.IOException;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import is.siggigauti.stormy.R;
-import is.siggigauti.stormy.weather.Property;
 import is.siggigauti.stormy.weather.User;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -30,10 +25,15 @@ import okhttp3.Response;
 public class SignUpActivity extends AppCompatActivity {
     @BindView(R.id.signUpButton)
     Button signUpButton;
+    @BindView(R.id.input_name)
+    EditText userNameInput;
+    @BindView(R.id.input_email)
+    EditText userEmailInput;
+    @BindView(R.id.input_password)
+    EditText passwordInput;
+    @BindView(R.id.input_reEnterPassword)
+    EditText rePasswordInput;
 
-    private EditText userEmail;
-    private EditText userName;
-    private EditText rePassword;
     private MainActivity mainActivity;
     private User user;
 
@@ -43,39 +43,24 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);
 
-        signUpButton = (Button) findViewById(R.id.signUpButton);
-        userName = (EditText) findViewById(R.id.input_name);
-        userEmail = (EditText) findViewById(R.id.input_email);
-        EditText password = (EditText) findViewById(R.id.input_password);
-        password = (EditText) findViewById(R.id.input_password);
-        rePassword = (EditText) findViewById(R.id.input_reEnterPassword);
 
-        final EditText finalPassword = password;
+        final EditText finalPassword = passwordInput;
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(finalPassword != rePassword) {
-
+                if(finalPassword != rePasswordInput) {
                 }
+                System.out.println("Smellt á Búa til aðgang");
+                String username = userNameInput.getText().toString();
+                String email = userEmailInput.getText().toString();
+                String rePass = rePasswordInput.getText().toString();
+                System.out.println("username:"+ username);
+                System.out.println("email:"+ email);
+                System.out.println("password:"+ rePass);
+                saveUser(new User(username, rePass, email));
 
-            System.out.println("Smellt á Búa til aðgang");
-            String username = userName.getText().toString();
-            String email = userEmail.getText().toString();
-            String rePass = rePassword.getText().toString();
-            System.out.println("username:"+ username);
-            System.out.println("email:"+ email);
-            System.out.println("password:"+ rePass);
-            User Nyrnotandi = new User();
-
-            Nyrnotandi.setUserEmail(email);
-            Nyrnotandi.setUserName(username);
-            Nyrnotandi.setUserPassword(rePass);
-
-            SaveUser(Nyrnotandi);
-
-            // Búið að búa til account og notandi fluttur yfir á login page
-            goToLoginPage();
-
+                // Búið að búa til account og notandi fluttur yfir á login page
+                goToLoginPage();
             }
 
         }
@@ -83,36 +68,36 @@ public class SignUpActivity extends AppCompatActivity {
         );
     }
 
-    private void SaveUser(User nyrnotandi) {
+    private void saveUser(User newUser) {
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Býr til notanda fyrir þig");
         progressDialog.show();
         String URL_DATA = "http://10.0.2.2:9090/saveUser";
-        System.out.println(URL_DATA);
-
         RequestBody formBody = new FormBody.Builder()
-                .add("userEmail", nyrnotandi.getUserEmail())
-                .add("userName", nyrnotandi.getUserName())
-                .add("userPassword", nyrnotandi.getUserPassword())
+                .add("username", newUser.getUserName())
+                .add("emailaddress", newUser.getUserEmail())
+                .add("password", newUser.getUserPassword())
                 .build();
 
         Request request = new Request.Builder()
                 .url(URL_DATA)
                 .post(formBody)
                 .build();
+        callBackend(request);
+    }
 
+    private void callBackend(Request request){
         OkHttpClient client = new OkHttpClient();
         Call call = client.newCall(request);
         call.enqueue(new Callback() {
-
             @Override
             public void onFailure(Call call, IOException e) {
-                System.out.print("Villa");
+                System.out.println("bilad");
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                System.out.print("Positive");
+                System.out.println("virkar");
             }
         });
     }
