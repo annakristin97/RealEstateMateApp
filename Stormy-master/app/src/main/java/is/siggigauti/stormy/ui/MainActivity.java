@@ -25,7 +25,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import is.siggigauti.stormy.R;
-import is.siggigauti.stormy.ui.login.LoginActivity;
 import is.siggigauti.stormy.weather.FilteredProperties;
 import is.siggigauti.stormy.weather.Property;
 import okhttp3.Call;
@@ -50,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
     Button linkToLoginButton;
     @BindView(R.id.aboutButton)
     Button aboutButton;
+    @BindView(R.id.homepageButton)
+    Button mHomePageButton;
+
 
 
     @Override
@@ -57,7 +59,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
+        mHomePageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openUserHomePage();
+            }
+        });
         linkToLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,17 +121,13 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
+    private void openUserHomePage() {
+        Intent intent = new Intent(this, UserHomeActivity.class);
+        startActivity(intent);
+    }
 
     private void openLoginPage() {
         Intent intent = new Intent(this, LoginActivity.class);
-        linkToLoginButton = (Button) findViewById(R.id.linkToLoginButton);
-        linkToLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openLoginPage();
-                System.out.println("Þú ýttir á login");
-            }
-        });
         startActivity(intent);
     }
 
@@ -154,6 +157,14 @@ public class MainActivity extends AppCompatActivity {
                     .build();
 
             callBackend(request);
+    }
+
+    public void getUsers() {
+        Request request = new Request.Builder()
+                .url("http://10.0.2.2:9090/getAllUsers")
+                .build();
+
+        callBackend(request);
     }
 
     private void callBackend(Request request){
@@ -203,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, R.string.network_unavailable_message, Toast.LENGTH_LONG).show();
         }
-        }
+    }
 
     private void updateDisplay() {
         mAdapter = new PropertyAdapter(this, mFilteredProperties.getProperties());
