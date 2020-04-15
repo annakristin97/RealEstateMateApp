@@ -35,6 +35,8 @@ public class PropertyActivity extends AppCompatActivity {
     @BindView(R.id.makeOfferButton)
     Button makeOfferButton;
 
+    @BindView(R.id.congratulations) TextView congratulations;
+
     private Property property;
     public Long propertyID;
 

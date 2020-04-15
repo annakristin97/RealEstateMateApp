@@ -13,9 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Random;
@@ -41,10 +44,14 @@ public class MakeOfferFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
     public static final String TAG = MakeOfferFragment.class.getSimpleName();
+    public boolean svar=true;
 
     //@BindView(R.id.OfferAmount)
     //EditText input_offer;
+   // @BindView(R.id.noUser)
+    //TextView noUser;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -87,6 +94,7 @@ public class MakeOfferFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_make_offer, container, false);
         Button b = (Button) v.findViewById(R.id.makeOfferButtonID);
+        final TextView noUser = (TextView) v.findViewById(R.id.noUser);
         final TextInputLayout offerAmount = (TextInputLayout) v.findViewById(R.id.OfferAmount);
         final String propertyIDdata = getArguments().getString("data");
         final Long propertyID = Long.parseLong(propertyIDdata);
@@ -95,20 +103,26 @@ public class MakeOfferFragment extends Fragment {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Tilbod gert");
-                Random rand = new Random();
-                int offerID = rand.nextInt(1000);
-                int userID= rand.nextInt(1000);
-                String of = offerID +" ";
-                String us = userID +"";
-                System.out.println(offerAmount.getEditText().getText().toString());
-                String u=offerAmount.getEditText().getText().toString();
+
+                if(isLoggedIn()) {
+                    System.out.println("Tilbod gert");
+                    Random rand = new Random();
+                    int offerID = rand.nextInt(1000);
+                    String of = offerID + " ";
+                    System.out.println(offerAmount.getEditText().getText().toString());
+                    String u = offerAmount.getEditText().getText().toString();
 
 
-                SaveOffer(of,propertyIDdata,u,us);
-                //Offer offer = new Offer(offerID,propertyID,u,userID);
-
-                closeFragment();
+                    SaveOffer(of, propertyIDdata, u);
+                    //Offer offer = new Offer(offerID,propertyID,u,userID);
+                    /*Congratulations birt a activity*/
+                    PropertyActivity activity = (PropertyActivity) getActivity();
+                    activity.makeOfferButton.isPressed();
+                    activity.congratulations.setText("Congratulations you have made an offer on this property!");
+                    closeFragment();
+                }else{
+                    noUser.setText("You have to be logged in to make a offer!");
+                }
             }});
         return v;
     }
@@ -117,7 +131,7 @@ public class MakeOfferFragment extends Fragment {
         }
 
         /*Kallar á fallið SaveOffer2 í bakenda */
-        public void SaveOffer(String offerID,String propertyID,String upph,String userID){
+        public void SaveOffer(String offerID,String propertyID,String upph){
             System.out.println(propertyID);
             System.out.println(upph);
             RequestBody formBody = new FormBody.Builder()
@@ -141,12 +155,56 @@ public class MakeOfferFragment extends Fragment {
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    System.out.println("vrikar");
+                    System.out.println("virkar");
                 }
             });
         }
 
     private boolean isNetworkAvailable() {
         return true;
+    }
+    private boolean isLoggedIn() {
+        //RequestBody formBody = new FormBody.Builder();
+        Request request = new Request.Builder()
+                .url("http://10.0.2.2:9090/isLoggedIn")
+                .build();
+
+        OkHttpClient client = new OkHttpClient();
+        Call call = client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                System.out.println("bilad");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                System.out.println("virkar");
+                svar=true;
+/*
+                try {
+                    String jsonData = response.body().string();
+                    Log.v(TAG, jsonData);
+                    if (response.isSuccessful()) {
+                        System.out.println("json data h'er");
+                        System.out.println(jsonData);
+                        System.out.println("json data h'er");
+                        JSONArray array=new JSONArray(jsonData);
+                        //JSONObject elem=(JSONObject)array.get(0);
+                        svar=true;
+                        //elem.getBoolean("");
+
+                    } else {
+                        //alertUserAboutError();
+                        svar=false;
+                    }
+                } catch (IOException e) {
+                    Log.e(TAG, "Exception caught: ", e);
+                } catch (JSONException e) {
+                    Log.e(TAG, "JSON caught: ", e);
+                }*/
+            }
+        });
+        return svar;
     }
 }
