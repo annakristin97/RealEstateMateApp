@@ -43,6 +43,7 @@ public class UserHomeActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        user = new User("TempUser", "temppass", "temp@mail.com");
         setContentView(R.layout.activity_userhome);
         ButterKnife.bind(this);
         getSessionUser();
