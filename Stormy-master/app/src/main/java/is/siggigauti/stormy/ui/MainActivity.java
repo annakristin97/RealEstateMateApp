@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +29,7 @@ import butterknife.ButterKnife;
 import is.siggigauti.stormy.R;
 import is.siggigauti.stormy.weather.FilteredProperties;
 import is.siggigauti.stormy.weather.Property;
+import is.siggigauti.stormy.weather.User;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -59,6 +62,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        /*
+        User testUser = new User("kalli", "pass", "email");
+        JSONObject json = SignUpActivity.getUserJson(testUser);
+        System.out.println(json);
+
+         */
+
         mHomePageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
