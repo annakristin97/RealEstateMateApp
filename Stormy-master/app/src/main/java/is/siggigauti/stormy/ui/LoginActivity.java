@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     @BindView((R.id.userPassword_input))
     EditText userPasswordInput;
     private SharedPreferences mPrefs;
-    final String PREFERENCE_STRING = "loggedUser";
+    final String PREFERENCE_STRING = "LoggedInUser";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
