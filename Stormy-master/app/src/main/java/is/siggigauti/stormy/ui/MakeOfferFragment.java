@@ -51,14 +51,13 @@ public class MakeOfferFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     public static final String TAG = MakeOfferFragment.class.getSimpleName();
-<<<<<<< HEAD
+
     public boolean svar=true;
-=======
+
     private User user;
     private SharedPreferences mPrefs;
     final String PREFERENCE_STRING = "LoggedInUser";
     private int userID = 0;
->>>>>>> saveToJsonFile
 
     //@BindView(R.id.OfferAmount)
     //EditText input_offer;
@@ -192,7 +191,6 @@ public class MakeOfferFragment extends Fragment {
     private boolean isNetworkAvailable() {
         return true;
     }
-<<<<<<< HEAD
     private boolean isLoggedIn() {
         //RequestBody formBody = new FormBody.Builder();
         Request request = new Request.Builder()
@@ -210,7 +208,7 @@ public class MakeOfferFragment extends Fragment {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 System.out.println("virkar");
-                svar=true;
+                svar = true;
 /*
                 try {
                     String jsonData = response.body().string();
@@ -235,8 +233,9 @@ public class MakeOfferFragment extends Fragment {
                 }*/
             }
         });
+
         return svar;
-=======
+    }
     private void parseUserData(String userData) throws JSONException {
         if (userData == null){
             goToMain();
@@ -256,6 +255,5 @@ public class MakeOfferFragment extends Fragment {
     private void goToLogin(){
         //Intent intent = new Intent(this, LoginActivity.class);
         //startActivity(intent);
->>>>>>> saveToJsonFile
     }
 }
