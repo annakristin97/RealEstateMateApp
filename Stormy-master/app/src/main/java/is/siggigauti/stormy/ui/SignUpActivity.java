@@ -49,6 +49,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(finalPassword != rePasswordInput) {
+                    System.out.println("password should match! But doesn't really matter.");
                 }
                 System.out.println("Smellt á Búa til aðgang");
                 String username = userNameInput.getText().toString();

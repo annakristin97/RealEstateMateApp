@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     Button mFilterButton;
     @BindView(R.id.linkToLoginButton)
     Button linkToLoginButton;
+    @BindView(R.id.homepageButton)
+    Button mHomePageButton;
 
 
 
@@ -55,7 +57,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
+        mHomePageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openUserHomePage();
+            }
+        });
         linkToLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,17 +114,13 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
+    private void openUserHomePage() {
+        Intent intent = new Intent(this, UserHomeActivity.class);
+        startActivity(intent);
+    }
 
     private void openLoginPage() {
         Intent intent = new Intent(this, LoginActivity.class);
-        linkToLoginButton = (Button) findViewById(R.id.linkToLoginButton);
-        linkToLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openLoginPage();
-                System.out.println("Þú ýttir á login");
-            }
-        });
         startActivity(intent);
     }
 
