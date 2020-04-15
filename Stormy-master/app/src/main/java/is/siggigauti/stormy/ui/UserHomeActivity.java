@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -36,6 +37,8 @@ public class UserHomeActivity extends AppCompatActivity {
     private User user;
     @BindView(R.id.propertyList)
     ListView mPropertyList;
+    @BindView(R.id.usernameTextView)
+    TextView mUserNameTextView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,7 @@ public class UserHomeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         getSessionUser();
         getProperties();
+        mUserNameTextView.setText(user.getUserName());
     }
 
     /**
@@ -114,7 +118,7 @@ public class UserHomeActivity extends AppCompatActivity {
                             if (jsonData.trim().charAt(0) == '[')
                                 mFilteredProperties = parsePropertyListDetails(jsonData);
                             if (jsonData.trim().charAt(0) == '{')
-                                user = parseUserData(jsonData);
+                                parseUserData(jsonData);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -178,11 +182,11 @@ public class UserHomeActivity extends AppCompatActivity {
         return filteredProperties;
     }
 
-    private User parseUserData(String userData) throws JSONException {
+    private void parseUserData(String userData) throws JSONException {
         JSONObject jsonObk= new JSONObject(userData);
         JSONObject json = jsonObk.getJSONObject("user");
         System.out.println(json);
-        return new User(json.get("userName").toString(),
+        user =  new User(json.get("userName").toString(),
                 json.get("userPassword").toString(),
                 json.get("userEmail").toString());
     }
