@@ -2,11 +2,12 @@ package is.siggigauti.stormy.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,7 +26,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import is.siggigauti.stormy.R;
-import is.siggigauti.stormy.ui.login.LoginActivity;
 import is.siggigauti.stormy.weather.FilteredProperties;
 import is.siggigauti.stormy.weather.Property;
 import okhttp3.Call;
@@ -50,14 +50,41 @@ public class MainActivity extends AppCompatActivity {
     Button linkToLoginButton;
     @BindView(R.id.aboutButton)
     Button aboutButton;
+    @BindView(R.id.homepageButton)
+    Button mHomePageButton;
+    private SharedPreferences mPrefs;
+
+    final String PREFERENCE_STRING = "LoggedInUser";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mPrefs =  getSharedPreferences(PREFERENCE_STRING, MODE_PRIVATE);
         ButterKnife.bind(this);
+        //Clear JSON file
+//Todo Finna leið til að keyra aðeins einu sinni í start af appi, eða þegar appið terminatest
+//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+//        System.out.println(!prefs.getBoolean("firstTime", false));
+//        System.out.println("Hellllllooooo!!!!");
+//        if(prefs.getBoolean("firstTime", false)) {
+//            // run your one time code
+//            System.out.println("Clear saved user preference");
+//            SharedPreferences.Editor prefsEditor = mPrefs.edit();
+//            prefsEditor.putString("LoggedInUser", null);
+//            prefsEditor.commit();
+//            SharedPreferences.Editor editor = prefs.edit();
+//            editor.putBoolean("firstTime", true);
+//            editor.commit();
+//        }
 
+        mHomePageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openUserHomePage();
+            }
+        });
         linkToLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,17 +141,13 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
+    private void openUserHomePage() {
+        Intent intent = new Intent(this, UserHomeActivity.class);
+        startActivity(intent);
+    }
 
     private void openLoginPage() {
         Intent intent = new Intent(this, LoginActivity.class);
-        linkToLoginButton = (Button) findViewById(R.id.linkToLoginButton);
-        linkToLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openLoginPage();
-                System.out.println("Þú ýttir á login");
-            }
-        });
         startActivity(intent);
     }
 
@@ -154,6 +177,14 @@ public class MainActivity extends AppCompatActivity {
                     .build();
 
             callBackend(request);
+    }
+
+    public void getUsers() {
+        Request request = new Request.Builder()
+                .url("http://10.0.2.2:9090/getAllUsers")
+                .build();
+
+        callBackend(request);
     }
 
     private void callBackend(Request request){
@@ -203,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, R.string.network_unavailable_message, Toast.LENGTH_LONG).show();
         }
-        }
+    }
 
     private void updateDisplay() {
         mAdapter = new PropertyAdapter(this, mFilteredProperties.getProperties());
