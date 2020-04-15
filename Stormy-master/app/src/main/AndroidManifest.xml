@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.PropertyActivity"></activity>
-        <activity android:name=".SignUpActivity"></activity>
+        <activity android:name=".ui.SignUpActivity"></activity>
         <activity android:name=".ui.AboutActivity"></activity>
         <activity android:name=".ui.UserHomeActivity"></activity>
         <activity
