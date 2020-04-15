@@ -2,19 +2,18 @@ package is.siggigauti.stormy.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,7 +28,6 @@ import butterknife.ButterKnife;
 import is.siggigauti.stormy.R;
 import is.siggigauti.stormy.weather.FilteredProperties;
 import is.siggigauti.stormy.weather.Property;
-import is.siggigauti.stormy.weather.User;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -54,20 +52,32 @@ public class MainActivity extends AppCompatActivity {
     Button aboutButton;
     @BindView(R.id.homepageButton)
     Button mHomePageButton;
+    private SharedPreferences mPrefs;
 
+    final String PREFERENCE_STRING = "LoggedInUser";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mPrefs =  getSharedPreferences(PREFERENCE_STRING, MODE_PRIVATE);
         ButterKnife.bind(this);
-        /*
-        User testUser = new User("kalli", "pass", "email");
-        JSONObject json = SignUpActivity.getUserJson(testUser);
-        System.out.println(json);
-
-         */
+        //Clear JSON file
+//Todo Finna leið til að keyra aðeins einu sinni í start af appi, eða þegar appið terminatest
+//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+//        System.out.println(!prefs.getBoolean("firstTime", false));
+//        System.out.println("Hellllllooooo!!!!");
+//        if(prefs.getBoolean("firstTime", false)) {
+//            // run your one time code
+//            System.out.println("Clear saved user preference");
+//            SharedPreferences.Editor prefsEditor = mPrefs.edit();
+//            prefsEditor.putString("LoggedInUser", null);
+//            prefsEditor.commit();
+//            SharedPreferences.Editor editor = prefs.edit();
+//            editor.putBoolean("firstTime", true);
+//            editor.commit();
+//        }
 
         mHomePageButton.setOnClickListener(new View.OnClickListener() {
             @Override

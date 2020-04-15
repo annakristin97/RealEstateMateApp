@@ -2,6 +2,7 @@ package is.siggigauti.stormy.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -31,7 +32,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class UserHomeActivity extends AppCompatActivity {
-    public static final String TAG = MainActivity.class.getSimpleName();
+    public static final String TAG = UserHomeActivity.class.getSimpleName();
     private FilteredProperties mFilteredProperties;
     private PropertyAdapter mAdapter;
     private User user;
@@ -39,14 +40,30 @@ public class UserHomeActivity extends AppCompatActivity {
     ListView mPropertyList;
     @BindView(R.id.usernameTextView)
     TextView mUserNameTextView;
-
+    private SharedPreferences mPrefs;
+    final String PREFERENCE_STRING = "LoggedInUser";
+    private int userID = 0;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPrefs =  getSharedPreferences(PREFERENCE_STRING, MODE_PRIVATE);
         user = new User("TempUser", "temppass", "temp@mail.com");
+        String json = mPrefs.getString("LoggedInUser", "");
+        if (json == null)
+            System.out.println("hdfka;dflkajsf;lkajdsf;laksdjf;adslkfjas;lfkja;dlfkfjasf;l");
+        System.out.println(json);
+//                                User obj = gson.fromJson(json, MyObject.class);
+        try{
+            parseUserData(json);
+        }catch (JSONException e){
+            Log.e(TAG, "JSON caught: ", e);
+            goToLogin();
+        }
+//        User blaUser = new Gson().fromJson(json, User.class);
+
         setContentView(R.layout.activity_userhome);
         ButterKnife.bind(this);
-        getSessionUser();
+//        getSessionUser();
         getProperties();
         mUserNameTextView.setText(user.getUserName());
     }
@@ -116,10 +133,8 @@ public class UserHomeActivity extends AppCompatActivity {
 
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
-                            if (jsonData.trim().charAt(0) == '[')
-                                mFilteredProperties = parsePropertyListDetails(jsonData);
-                            if (jsonData.trim().charAt(0) == '{')
-                                parseUserData(jsonData);
+                            mFilteredProperties = parsePropertyListDetails(jsonData);
+
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -154,7 +169,7 @@ public class UserHomeActivity extends AppCompatActivity {
         JSONArray array=new JSONArray(jsonData);
         for(int i=0;i<array.length();i++){
             JSONObject elem=(JSONObject)array.get(i);
-            if (elem.getLong("sellerID") == 1 ) {
+            if (elem.getLong("sellerID") == userID ) {
                 Property property = new Property(elem.getLong("propertyID"),
                         elem.getLong("bedrooms"),
                         elem.getLong("bathrooms"),
@@ -184,14 +199,21 @@ public class UserHomeActivity extends AppCompatActivity {
     }
 
     private void parseUserData(String userData) throws JSONException {
+        if (userData == null){
+            goToMain();
+        }
         JSONObject jsonObk= new JSONObject(userData);
         JSONObject json = jsonObk.getJSONObject("user");
         System.out.println(json);
-        user =  new User(json.get("userName").toString(),
+        userID = json.getInt("id");
+        user =  new User(userID, json.get("userName").toString(),
                 json.get("userPassword").toString(),
                 json.get("userEmail").toString());
     }
-
+    private void goToLogin(){
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
 
     private void goToMain(){
         Intent intent = new Intent(this, MainActivity.class);

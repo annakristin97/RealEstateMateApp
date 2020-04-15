@@ -39,7 +39,7 @@ dependencies {
     implementation 'com.synnapps:carouselview:0.1.5'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     testImplementation 'junit:junit:4.12'
-    //implementation 'com.google.code.gson:gson:2.8.6'
+//    implementation 'com.google.code.gson:gson:2.8.6'
     implementation files('libs/gson-2.8.6.jar')
 }
 configurations.all {
