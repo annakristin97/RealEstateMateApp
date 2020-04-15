@@ -31,7 +31,7 @@
                 android:hint="Notendanafn"
                 android:inputType="textPersonName"
                 android:backgroundTint="@color/colorExtra2"
-                android:textColorHint="@color/colorText"/>
+                android:textColor="@color/colorText"/>
         </android.support.design.widget.TextInputLayout>
 
         <!-- Address Label -->
@@ -58,7 +58,8 @@
                 android:layout_height="wrap_content"
                 android:hint="Tölvupóstur"
                 android:inputType="textEmailAddress"
-                android:backgroundTint="@color/colorExtra2"/>
+                android:backgroundTint="@color/colorExtra2"
+                android:textColorHint="@color/colorText"/>
         </android.support.design.widget.TextInputLayout>
 
 
@@ -83,7 +84,8 @@
                 android:layout_height="wrap_content"
                 android:hint="Lykilorð"
                 android:inputType="textPassword"
-                android:backgroundTint="@color/colorExtra2"/>
+                android:backgroundTint="@color/colorExtra2"
+                android:textColorHint="@color/colorText"/>
         </android.support.design.widget.TextInputLayout>
 
         <!-- Password Re-enter Label -->
@@ -92,15 +94,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:textColorHint="@color/colorText"
-            android:backgroundTint="@color/colorExtra1">
+            android:textColorHint="@color/colorText">
 
             <EditText
                 android:id="@+id/input_reEnterPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Staðfesting lykilorðs"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword"
+                android:textColorHint="@color/colorText"
+                android:backgroundTint="@color/colorExtra2"/>
         </android.support.design.widget.TextInputLayout>
 
         <!-- Signup Button -->
