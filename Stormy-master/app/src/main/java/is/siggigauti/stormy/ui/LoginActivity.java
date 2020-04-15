@@ -72,9 +72,9 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.show();
         String URL_DATA = "http://10.0.2.2:9090/login";
         RequestBody formBody = new FormBody.Builder()
-                .add("username", userName)
-                .add("emailaddress", "")
-                .add("password", password)
+                .add("userName", userName)
+                .add("emailAddress", "")
+                .add("userPassword", password)
                 .build();
 
         Request request = new Request.Builder()
