@@ -22,7 +22,9 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import is.siggigauti.stormy.R;
+import is.siggigauti.stormy.weather.FilteredOffers;
 import is.siggigauti.stormy.weather.FilteredProperties;
+import is.siggigauti.stormy.weather.Offer;
 import is.siggigauti.stormy.weather.Property;
 import is.siggigauti.stormy.weather.User;
 import okhttp3.Call;
@@ -34,10 +36,14 @@ import okhttp3.Response;
 public class UserHomeActivity extends AppCompatActivity {
     public static final String TAG = UserHomeActivity.class.getSimpleName();
     private FilteredProperties mFilteredProperties;
+    private FilteredOffers mFilteredOffers;
     private PropertyAdapter mAdapter;
+    private OfferAdapter mAdapter2;
     private User user;
     @BindView(R.id.propertyList)
     ListView mPropertyList;
+    @BindView(R.id.offerList)
+    ListView mOfferList;
     @BindView(R.id.usernameTextView)
     TextView mUserNameTextView;
     private SharedPreferences mPrefs;
@@ -65,6 +71,7 @@ public class UserHomeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 //        getSessionUser();
         getProperties();
+        getOffers();
         mUserNameTextView.setText(user.getUserName());
     }
 
@@ -89,6 +96,15 @@ public class UserHomeActivity extends AppCompatActivity {
 
         callBackend(request);
     }
+
+    private void getOffers() {
+        Request request = new Request.Builder()
+                .url("http://10.0.2.2:9090/Offers")
+                .build();
+
+        callBackendOffers(request);
+    }
+
     private boolean isNetworkAvailable() {
         ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
@@ -96,6 +112,7 @@ public class UserHomeActivity extends AppCompatActivity {
         if(networkInfo!= null && networkInfo.isConnected()) isAvailable = true;
         return isAvailable;
     }
+
     private void alertUserAboutError() {
         AlertDialogFragment dialog = new AlertDialogFragment();
         dialog.show(getFragmentManager(), "error_dialog");
@@ -156,10 +173,65 @@ public class UserHomeActivity extends AppCompatActivity {
         }
     }
 
+    private void callBackendOffers(Request request){
+        OkHttpClient client = new OkHttpClient();
+
+        if(isNetworkAvailable()) {
+            Call call = client.newCall(request);
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                        }
+                    });
+                    alertUserAboutError();
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                        }
+                    });
+                    try {
+                        String jsonData = response.body().string();
+
+                        Log.v(TAG, jsonData);
+                        if (response.isSuccessful()) {
+                            mFilteredOffers = parseOfferListDetails(jsonData);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    updateDisplay();
+                                }
+                            });
+                        } else {
+                            alertUserAboutError();
+                        }
+                    } catch (IOException e) {
+                        Log.e(TAG, "Exception caught: ", e);
+                    } catch (JSONException e) {
+                        Log.e(TAG, "JSON caught: ", e);
+                    }
+                }
+            });
+        } else {
+            Toast.makeText(this, R.string.network_unavailable_message, Toast.LENGTH_LONG).show();
+        }
+    }
+
     private void updateDisplay() {
         mAdapter = new PropertyAdapter(this, mFilteredProperties.getProperties());
 
         mPropertyList.setAdapter(mAdapter);
+
+        mAdapter2 = new OfferAdapter(this, mFilteredOffers.getOffers());
+
+        mOfferList.setAdapter(mAdapter2);
     }
 
     private FilteredProperties parsePropertyListDetails(String jsonData) throws JSONException{
@@ -196,6 +268,28 @@ public class UserHomeActivity extends AppCompatActivity {
         filteredProperties.setProperties(properties);
 
         return filteredProperties;
+    }
+
+    private FilteredOffers parseOfferListDetails(String jsonData) throws JSONException{
+        FilteredOffers filteredOffers = new FilteredOffers();
+
+        ArrayList<Offer> offers =new ArrayList<Offer>();
+        JSONArray array=new JSONArray(jsonData);
+        for(int i=0;i<array.length();i++){
+            JSONObject elem=(JSONObject)array.get(i);
+            if (elem.getLong("userID") == userID ) {
+                Offer offer = new Offer(elem.getLong("offerID"),
+                        elem.getLong("propertyID"),
+                        elem.getLong("offerAmount"),
+                        elem.getLong("userID"));
+                System.out.println(elem.getLong("offerAmount"));
+                offers.add(offer);
+            }
+        }
+
+        filteredOffers.setOffers(offers);
+
+        return filteredOffers;
     }
 
     private void parseUserData(String userData) throws JSONException {
