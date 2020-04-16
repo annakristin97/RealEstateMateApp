@@ -36,7 +36,7 @@
 
                 <TableLayout
                     android:layout_width="match_parent"
-                    android:layout_height="444dp"
+                    android:layout_height="392dp"
                     android:layout_margin="20dp">
 
                     <TableRow
@@ -129,12 +129,13 @@
                 <ScrollView
                     android:id="@+id/legal_scrollView"
                     android:layout_width="match_parent"
-                    android:layout_height="88dp">
+                    android:layout_height="161dp">
 
                     <TextView
                         android:id="@+id/textView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/colorText"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:text="@string/about_legaltext" />
