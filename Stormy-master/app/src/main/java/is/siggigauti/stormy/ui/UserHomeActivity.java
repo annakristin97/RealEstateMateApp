@@ -241,7 +241,7 @@ public class UserHomeActivity extends AppCompatActivity {
         JSONArray array=new JSONArray(jsonData);
         for(int i=0;i<array.length();i++){
             JSONObject elem=(JSONObject)array.get(i);
-            if (elem.getLong("sellerID") == 5 ) {
+            if (elem.getLong("sellerID") == userID ) {
                 Property property = new Property(elem.getLong("propertyID"),
                         elem.getLong("bedrooms"),
                         elem.getLong("bathrooms"),
@@ -277,7 +277,7 @@ public class UserHomeActivity extends AppCompatActivity {
         JSONArray array=new JSONArray(jsonData);
         for(int i=0;i<array.length();i++){
             JSONObject elem=(JSONObject)array.get(i);
-            if (elem.getLong("userID") == 11 ) {
+            if (elem.getLong("userID") == userID ) {
                 Offer offer = new Offer(elem.getLong("offerID"),
                         elem.getLong("propertyID"),
                         elem.getLong("offerAmount"),
