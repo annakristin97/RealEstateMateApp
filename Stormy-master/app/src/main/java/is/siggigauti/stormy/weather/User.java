@@ -1,9 +1,6 @@
 package is.siggigauti.stormy.weather;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class User {
     public long id;
 
@@ -17,7 +14,12 @@ public class User {
 
     public User() {
     }
-
+    public User(int id, String userName, String userPassword, String userEmail) {
+        this.userName = userName;
+        this.userPassword = userPassword;
+        this.userEmail = userEmail;
+        this.id = id;
+    }
     public User(String userName, String userPassword, String userEmail) {
         this.userName = userName;
         this.userPassword = userPassword;
@@ -52,6 +54,16 @@ public class User {
     public long getId() { return id; }
 
     public void setId(Long id) { this.id = id; }
+
+    @Override
+    public String toString() {
+        return '{' +
+                "ID=" + id +
+                ", userName='" + userName + '\'' +
+                ", userPassword='" + userPassword + '\'' +
+                ", userEmail='" + userEmail + '\'' +
+                '}';
+    }
 
 }
 

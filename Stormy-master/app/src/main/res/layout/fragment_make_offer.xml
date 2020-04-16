@@ -11,13 +11,14 @@
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="444dp"
+        android:layout_height="516dp"
         android:orientation="vertical"
         android:paddingLeft="24dp"
         android:paddingTop="56dp"
         android:paddingRight="24dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textSize="36sp">
+        android:textSize="36sp"
+        android:visibility="visible">
 
         <TextView
             android:id="@+id/MakeOfferTItle"
@@ -55,10 +56,29 @@
             android:layout_width="match_parent"
             android:layout_height="65dp"
             android:background="@color/colorButton"
-            android:text="Make offer"
+            android:text="make offer"
             android:textColor="@color/colorText"
             android:visibility="visible"
             tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/noUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text=""
+            android:textColor="#F80404"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/goToLogin"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:background="@color/colorButton"
+            android:text="Sign in"
+            android:textColor="@color/colorText"
+            android:visibility="invisible"
+            tools:visibility="invisible" />
 
     </LinearLayout>
 

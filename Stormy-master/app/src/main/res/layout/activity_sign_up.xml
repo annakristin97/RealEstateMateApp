@@ -28,7 +28,7 @@
                 android:id="@+id/input_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Notendanafn"
+                android:hint="Username"
                 android:inputType="textPersonName"
                 android:backgroundTint="@color/colorExtra2"
                 android:textColor="@color/colorText"/>
@@ -56,9 +56,10 @@
                 android:id="@+id/input_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Tölvupóstur"
+                android:hint="Email Adress"
                 android:inputType="textEmailAddress"
                 android:backgroundTint="@color/colorExtra2"
+                android:textColor="@color/colorText"
                 android:textColorHint="@color/colorText"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -82,9 +83,10 @@
                 android:id="@+id/input_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Lykilorð"
+                android:hint="Password"
                 android:inputType="textPassword"
                 android:backgroundTint="@color/colorExtra2"
+                android:textColor="@color/colorText"
                 android:textColorHint="@color/colorText"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -100,8 +102,9 @@
                 android:id="@+id/input_reEnterPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Staðfesting lykilorðs"
+                android:hint="Re-enter password"
                 android:inputType="textPassword"
+                android:textColor="@color/colorText"
                 android:textColorHint="@color/colorText"
                 android:backgroundTint="@color/colorExtra2"/>
         </android.support.design.widget.TextInputLayout>
@@ -114,7 +117,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
             android:padding="12dp"
-            android:text="Búa til aðgang"
+            android:text="Create an account"
             android:background="@color/colorButton"
             android:textColor="@color/colorText"/>
 

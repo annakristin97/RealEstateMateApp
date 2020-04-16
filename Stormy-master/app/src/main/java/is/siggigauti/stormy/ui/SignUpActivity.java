@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import butterknife.BindView;
@@ -58,7 +61,12 @@ public class SignUpActivity extends AppCompatActivity {
                 System.out.println("username:"+ username);
                 System.out.println("email:"+ email);
                 System.out.println("password:"+ rePass);
-                saveUser(new User(username, rePass, email));
+                User newUser = new User(username, rePass, email);
+                saveUser(newUser);
+
+                // Kallar í userJson til að fá json-skrá með uppl. um user
+                // JSONObject userJson = getUserJson(newUser);
+
 
                 // Búið að búa til account og notandi fluttur yfir á login page
                 goToLoginPage();
@@ -104,39 +112,27 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
 
-    /*
-        public void SaveUser(User user){
-
-            RequestBody formBody = new FormBody.Builder()
-                    .add("userEmail", userEmail)
-                    .add("userName", userName)
-                    .add("userPassword", password)
-                    .build();
-            Request request = new Request.Builder()
-                    .url("http://10.0.2.2:9090/saveUser")
-                    .post(formBody)
-                    .build();
-
-            OkHttpClient client = new OkHttpClient();
-            Call call = client.newCall(request);
-            call.enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    System.out.print("Villa");
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    System.out.print("Positive");
-                }
-            });
-        }
-
-     */
     private void goToLoginPage() {
         System.out.println("Notandi fluttur yfir á login page");
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
+    }
+
+    /**
+     *
+     * @param user
+     * @return json file with user info
+     */
+    public static JSONObject getUserJson(User user) {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("userName", user.getUserName());
+            json.put("userPass", user.getUserPassword());
+            json.put("userEmail", user.getUserEmail());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json;
     }
 }
 

@@ -1,12 +1,14 @@
 package is.siggigauti.stormy.ui;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -51,20 +53,58 @@ public class MainActivity extends AppCompatActivity {
     Button aboutButton;
     @BindView(R.id.homepageButton)
     Button mHomePageButton;
+    @BindView(R.id.logOutButton)
+    Button logOutButton;
+    private SharedPreferences mPrefs;
 
+    public boolean userLoggedIn;
+
+    final String PREFERENCE_STRING = "LoggedInUser";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mPrefs =  getSharedPreferences(PREFERENCE_STRING, MODE_PRIVATE);
         ButterKnife.bind(this);
+        //Clear JSON file
+//Todo Finna leið til að keyra aðeins einu sinni í start af appi, eða þegar appið terminatest
+//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+//        System.out.println(!prefs.getBoolean("firstTime", false));
+//        System.out.println("Hellllllooooo!!!!");
+//        if(prefs.getBoolean("firstTime", false)) {
+//            // run your one time code
+//            System.out.println("Clear saved user preference");
+//            SharedPreferences.Editor prefsEditor = mPrefs.edit();
+//            prefsEditor.putString("LoggedInUser", null);
+//            prefsEditor.commit();
+//            SharedPreferences.Editor editor = prefs.edit();
+//            editor.putBoolean("firstTime", true);
+//            editor.commit();
+//        }
+        logOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+                progressDialog.setMessage("Logging out");
+                progressDialog.show();
+                System.out.println("Clear saved user preference");
+                SharedPreferences.Editor prefsEditor = mPrefs.edit();
+                prefsEditor.putString("LoggedInUser", null);
+                prefsEditor.commit();
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
         mHomePageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openUserHomePage();
             }
         });
+
         linkToLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -158,7 +198,12 @@ public class MainActivity extends AppCompatActivity {
 
             callBackend(request);
     }
-
+    private void clearUser() {
+        System.out.println("Clear saved user preference");
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        prefsEditor.putString("LoggedInUser", null);
+        prefsEditor.commit();
+    }
     public void getUsers() {
         Request request = new Request.Builder()
                 .url("http://10.0.2.2:9090/getAllUsers")
@@ -269,4 +314,5 @@ public class MainActivity extends AppCompatActivity {
         AlertDialogFragment dialog = new AlertDialogFragment();
         dialog.show(getFragmentManager(), "error_dialog");
     }
+
 }

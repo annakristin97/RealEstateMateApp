@@ -2,6 +2,7 @@ package is.siggigauti.stormy.ui;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -40,13 +41,16 @@ public class LoginActivity extends AppCompatActivity {
     EditText userNameInput;
     @BindView((R.id.userPassword_input))
     EditText userPasswordInput;
-
+    private SharedPreferences mPrefs;
+    final String PREFERENCE_STRING = "LoggedInUser";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+//        mPrefs =  getPreferences(MODE_PRIVATE);
+        mPrefs =  getSharedPreferences(PREFERENCE_STRING, MODE_PRIVATE);
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,6 +126,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private User parseUserData(String userData) throws JSONException {
         JSONObject jsonObk= new JSONObject(userData);
+
+        //Write JSON file
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        prefsEditor.putString("LoggedInUser", userData);
+        prefsEditor.commit();
         JSONObject json = jsonObk.getJSONObject("user");
         return new User(json.get("userName").toString(),
                 json.get("userPassword").toString(),
@@ -139,4 +148,7 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+
+
 }
+

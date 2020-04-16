@@ -16,17 +16,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:background="@color/colorBackground"
         android:clipChildren="false"
-        android:orientation="horizontal"
-        android:background="@color/colorBackground">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/propertiesButton"
-            android:layout_width="90dp"
+            android:layout_width="60dp"
             android:layout_height="40dp"
             android:layout_gravity="start"
             android:background="@color/colorExtra2"
             android:text="Properties"
+            android:textSize="10dp"
             android:textColor="@color/colorText" />
 
         <Space
@@ -36,11 +37,12 @@
 
         <Button
             android:id="@+id/linkToLoginButton"
-            android:layout_width="90dp"
+            android:layout_width="60dp"
             android:layout_height="40dp"
             android:layout_gravity="start"
             android:background="@color/colorBackground"
             android:text="Login"
+            android:textSize="10dp"
             android:textColor="@color/colorText" />
 
         <Space
@@ -50,10 +52,12 @@
 
         <Button
             android:id="@+id/homepageButton"
-            android:layout_width="90dp"
+            android:layout_width="60dp"
             android:layout_height="40dp"
             android:background="@color/colorBackground"
+            android:baselineAligned="false"
             android:text="My Page"
+            android:textSize="10dp"
             android:textColor="@color/colorText" />
 
         <Space
@@ -63,11 +67,30 @@
 
         <Button
             android:id="@+id/aboutButton"
-            android:layout_width="90dp"
+            android:layout_width="60dp"
             android:layout_height="40dp"
             android:background="@color/colorBackground"
             android:text="About"
+            android:textSize="10dp"
             android:textColor="@color/colorText" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/logOutButton"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:layout_gravity="start"
+            android:background="@color/colorExtra2"
+            android:text="Log Out"
+            android:textSize="10dp"
+            android:clickable="true"
+            android:textColor="@color/colorText" />
+
+
     </LinearLayout>
 
     <LinearLayout
