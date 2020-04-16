@@ -18,13 +18,12 @@ import java.util.List;
 
 import is.siggigauti.stormy.R;
 import is.siggigauti.stormy.weather.Offer;
-import is.siggigauti.stormy.weather.Property;
 
 
-public class OfferAdapter extends ArrayAdapter<Property> {
+public class OfferAdapter extends ArrayAdapter<Offer> {
 
     private Context mContext;
-    private List<Property> offersList = new ArrayList<>();
+    private List<Offer> offersList = new ArrayList<>();
 
     public OfferAdapter(@NonNull Context context, @LayoutRes List<Offer> list) {
         super(context, 0 , list);
@@ -42,10 +41,13 @@ public class OfferAdapter extends ArrayAdapter<Property> {
         Offer currentOffer = offersList.get(position);
 
         TextView name = (TextView) listItem.findViewById(R.id.textView_name);
-        name.setText(currentOffer.getPropertyID());
+        name.setText("Property ID: " + String.valueOf(currentOffer.getPropertyID()));
+
+        TextView size = (TextView) listItem.findViewById(R.id.textView_size);
+        size.setText("");
 
         TextView price = (TextView) listItem.findViewById(R.id.textView_price);
-        price.setText(String.valueOf(currentOffer.getOfferAmount()/1000000) + " mil.");
+        price.setText("Offer Amount: " + String.valueOf(currentOffer.getOfferAmount()/1000000) + " mil.");
 
         return listItem;
     }

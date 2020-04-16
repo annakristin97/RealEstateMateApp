@@ -4,7 +4,7 @@ import java.util.List;
 
 public class FilteredOffers {
 
-    private List<Property> offers;
+    private List<Offer> offers;
 
     public FilteredOffers() {
 
@@ -18,7 +18,7 @@ public class FilteredOffers {
         return offers;
     }
 
-    public void setProperties(List<Offer> offers) {
+    public void setOffers(List<Offer> offers) {
         this.offers = offers;
     }
 }
