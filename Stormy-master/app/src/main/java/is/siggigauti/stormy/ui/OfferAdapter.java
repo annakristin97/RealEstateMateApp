@@ -47,7 +47,7 @@ public class OfferAdapter extends ArrayAdapter<Offer> {
         size.setText("");
 
         TextView price = (TextView) listItem.findViewById(R.id.textView_price);
-        price.setText("Offer Amount: " + String.valueOf(currentOffer.getOfferAmount()/1000000) + " mil.");
+        price.setText("Offer Amount: " + String.valueOf(currentOffer.getOfferAmount()));
 
         return listItem;
     }
