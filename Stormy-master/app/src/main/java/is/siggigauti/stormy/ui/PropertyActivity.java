@@ -70,8 +70,16 @@ public class PropertyActivity extends AppCompatActivity {
             parseUserData(json);
         }catch (JSONException e){
             Log.e(TAG, "JSON caught: ", e);
-            goToLogin();
+            //goToLogin();
         }
+
+        toLogin.setVisibility(View.VISIBLE);
+        toLogin.setText("Home");
+        toLogin.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                goToMain();
+            }
+        });
 
         String imageId1 = (String) getIntent().getSerializableExtra("image1");
         String url1 = "http://10.0.2.2:9090/Image/" + imageId1;
@@ -134,10 +142,23 @@ public class PropertyActivity extends AppCompatActivity {
                 mPrefs =  getSharedPreferences(PREFERENCE_STRING, MODE_PRIVATE);
                 user = new User("TempUser", "temppass", "temp@mail.com");
                 String json = mPrefs.getString("LoggedInUser", "");
-               if(json==null){
-                //if(true){
-
-                    //congratulations.setText("You have to log in to make an offer");
+               if(json==null) {
+               }
+               try{
+                    parseUserData(json);
+                }catch (JSONException e){
+                    Log.e(TAG, "JSON caught: ", e);
+                    youHaveToLogIn.setVisibility(View.VISIBLE);
+                    toLogin.setVisibility(View.VISIBLE);
+                    toLogin.setText("Sign in");
+                    toLogin.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            goToLogin();
+                        }
+                    });
+                }
+/*
+                //congratulations.setText("You have to log in to make an offer");
                    // congratulations.setTextColor(android.R.color.holo_red_light);
                     //congratulations.setVisibility(View.VISIBLE);
                     youHaveToLogIn.setVisibility(View.VISIBLE);
@@ -146,18 +167,17 @@ public class PropertyActivity extends AppCompatActivity {
                         public void onClick(View v) {
                         goToLogin();
                         }
-                        });
-                }else{
+                        });*/
+                if(user.getUserName() != "TempUser") {
+                    FragmentManager fm = getSupportFragmentManager();
+                    MakeOfferFragment fragment = new MakeOfferFragment();
+                    Bundle data = new Bundle();//Use bundle to pass data
+                    data.putString("data", propertyID.toString());//put string, int, etc in bundle with a key value
+                    fragment.setArguments(data);//Finally set argument bundle to fragment
 
-                FragmentManager fm = getSupportFragmentManager();
-                MakeOfferFragment fragment =  new MakeOfferFragment();
-                Bundle data = new Bundle();//Use bundle to pass data
-                data.putString("data", propertyID.toString());//put string, int, etc in bundle with a key value
-                fragment.setArguments(data);//Finally set argument bundle to fragment
-
-                fm.beginTransaction().replace(R.id.activity_container, fragment).commit();
-
-            }}
+                    fm.beginTransaction().replace(R.id.activity_container, fragment).commit();
+                }
+            }
         });
 
 
