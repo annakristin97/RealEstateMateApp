@@ -44,7 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Offer Amount"
-                android:inputType="text"
+                android:inputType="number"
                 android:textColor="@color/colorText"
                 android:textColorHighlight="@color/colorText"
                 android:textColorLink="@color/colorText"

@@ -36,17 +36,18 @@ import okhttp3.Response;
 
 public class PropertyActivity extends AppCompatActivity {
 
-    @BindView(R.id.makeOfferButton)
-    Button makeOfferButton;
-
+    /*
+    * Breytur fyrir viðmót
+    * */
+    @BindView(R.id.makeOfferButton) Button makeOfferButton;
     @BindView(R.id.congratulations) TextView congratulations;
     @BindView(R.id.toLogin) Button toLogin;
-    @BindView(R.id.youHaveToLogIn)
-    TextView youHaveToLogIn;
+    @BindView(R.id.youHaveToLogIn) TextView youHaveToLogIn;
 
-    private Property property;
+    /*
+    * Breytur fyrir bakenda
+    * */
     public Long propertyID;
-
     public static final String TAG = PropertyActivity.class.getSimpleName();
     private User user;
     private SharedPreferences mPrefs;
@@ -59,20 +60,26 @@ public class PropertyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_property);
         ButterKnife.bind(this);
 
+        /*
+        * Náð í upplýsingar úr sharedPrefrences og prufu user búinn til
+        * */
         mPrefs =  getSharedPreferences(PREFERENCE_STRING, MODE_PRIVATE);
         user = new User("TempUser", "temppass", "temp@mail.com");
         String json = mPrefs.getString("LoggedInUser", "");
-        if (json == null)
-            System.out.println("hdfka;dflkajsf;lkajdsf;laksdjf;adslkfjas;lfkja;dlfkfjasf;l");
-        System.out.println(json);
-//                                User obj = gson.fromJson(json, MyObject.class);
+
+        /*
+         * Reynt að breyta upplýsingunum yfir í user hlut með fallinu parseUseData(json).
+         * Ekkert gert ef það virkar ekki.
+         * */
         try{
             parseUserData(json);
         }catch (JSONException e){
             Log.e(TAG, "JSON caught: ", e);
-            //goToLogin();
         }
 
+        /*
+         * Takkinn toLogin gerður visible en breytt í home takka og vísar á MainActivity.
+         * */
         toLogin.setVisibility(View.VISIBLE);
         toLogin.setText("Home");
         toLogin.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +88,9 @@ public class PropertyActivity extends AppCompatActivity {
             }
         });
 
+        /*
+        * Myndir sóttar úr intent og url-in sett í strengjafylki
+        * */
         String imageId1 = (String) getIntent().getSerializableExtra("image1");
         String url1 = "http://10.0.2.2:9090/Image/" + imageId1;
         String imageId2 = (String) getIntent().getSerializableExtra("image2");
@@ -90,10 +100,16 @@ public class PropertyActivity extends AppCompatActivity {
         System.out.println(url1);
         String[] imageUrls = new String[]{url1,url2,url3};
 
+        /*
+         * Myndirnar settar inn í viewPager í viðmóti svo hægt sé að skrolla í gegnum þær
+         * */
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         ViewPagerAdapter adapter = new ViewPagerAdapter(this, imageUrls);
         viewPager.setAdapter(adapter);
 
+        /*
+         * Upplýsingar um eign sóttar úr intent
+         * */
         propertyID = (Long) getIntent().getSerializableExtra("propertyID");
         String propertyName = (String) getIntent().getSerializableExtra("propertyName");
         String propertyNumber = (String) getIntent().getSerializableExtra("propertyNumber");
@@ -123,6 +139,9 @@ public class PropertyActivity extends AppCompatActivity {
         Long rooms =  (Long) getIntent().getSerializableExtra("rooms");
         String type = (String) getIntent().getSerializableExtra("type");
 
+        /*
+         * Viðmót fyllt út með viðeigandi breytum
+         * */
         TextView sizetext = (TextView) findViewById(R.id.sizetext);
         String sizet = size.toString() + " m^2";
         sizetext.setText(sizet);
@@ -133,15 +152,24 @@ public class PropertyActivity extends AppCompatActivity {
         TextView typetext = (TextView) findViewById(R.id.typetext);
         typetext.setText(type);
 
-        /*Þegar ýtt er á makeOfferButton er kallað á MakeOfferFragment og propertyID sett í bundle með*/
+        /*Þegar ýtt er á makeOfferButton
+        *
+        *Notandi loggaður inn:
+        *Kallað á MakeOfferFragment og propertyID sett í bundle með
+        *
+        * Notandi ekki loggaður inn:
+        * Button toLogin breytist úr 'Home' í 'Sign in' og vísar á Login Activity og
+        * texti birtist í textView youHaveToLogIn.
+        *
+        * */
         makeOfferButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Do something in response to button click
                 System.out.println("ytt a make offer");
 
                 mPrefs =  getSharedPreferences(PREFERENCE_STRING, MODE_PRIVATE);
                 user = new User("TempUser", "temppass", "temp@mail.com");
                 String json = mPrefs.getString("LoggedInUser", "");
+
                if(json==null) {
                }
                try{
@@ -157,17 +185,11 @@ public class PropertyActivity extends AppCompatActivity {
                         }
                     });
                 }
-/*
-                //congratulations.setText("You have to log in to make an offer");
-                   // congratulations.setTextColor(android.R.color.holo_red_light);
-                    //congratulations.setVisibility(View.VISIBLE);
-                    youHaveToLogIn.setVisibility(View.VISIBLE);
-                    toLogin.setVisibility(View.VISIBLE);
-                    toLogin.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                        goToLogin();
-                        }
-                        });*/
+
+                /*
+                * Ef userinn heitir enn TempUser þá er notandi loggaður út.
+                * Ef hann er ekki TempUser þá er notandi loggaður inn og MakeOfferFragment opnað.
+                * */
                 if(user.getUserName() != "TempUser") {
                     FragmentManager fm = getSupportFragmentManager();
                     MakeOfferFragment fragment = new MakeOfferFragment();
@@ -179,10 +201,11 @@ public class PropertyActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
     }
+
+    /*
+    * Streng úr sharedPrefrences breytt í notanda.
+    * */
     private void parseUserData(String userData) throws JSONException {
         if (userData == null){
             goToMain();
@@ -195,11 +218,18 @@ public class PropertyActivity extends AppCompatActivity {
                 json.get("userPassword").toString(),
                 json.get("userEmail").toString());
     }
+
+    /*
+    * Opnar LoginActivity
+    * */
     private void goToLogin(){
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 
+    /*
+    * Opnar MainActivity
+    * */
     private void goToMain(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

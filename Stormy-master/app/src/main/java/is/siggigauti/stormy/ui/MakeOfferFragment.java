@@ -45,80 +45,55 @@ import okhttp3.Response;
  * create an instance of this fragment.
  */
 public class MakeOfferFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
     public static final String TAG = MakeOfferFragment.class.getSimpleName();
-
     public boolean svar=true;
-
     private User user;
     private SharedPreferences mPrefs;
     final String PREFERENCE_STRING = "LoggedInUser";
     private int userID = 0;
 
-    //@BindView(R.id.OfferAmount)
-    //EditText input_offer;
-   // @BindView(R.id.noUser)
-    //TextView noUser;
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public MakeOfferFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MakeOfferFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static MakeOfferFragment newInstance(String param1, String param2) {
         MakeOfferFragment fragment = new MakeOfferFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        /*
+        * Context sótt til að nota sharedPrefrences til að sækja loggedin user.
+        * */
         Context context = getActivity();
         mPrefs = context.getSharedPreferences(PREFERENCE_STRING, context.MODE_PRIVATE);
-       // mPrefs =  getSharedPreferences(PREFERENCE_STRING, MODE_PRIVATE);
         user = new User("TempUser", "temppass", "temp@mail.com");
         String json = mPrefs.getString("LoggedInUser", "");
-        if (json == null)
-            System.out.println("hdfka;dflkajsf;lkajdsf;laksdjf;adslkfjas;lfkja;dlfkfjasf;l");
-        System.out.println(json);
-//                                User obj = gson.fromJson(json, MyObject.class);
+        /*
+        * Breytum json strengnum yfir í user með parseData(json).
+        * Ef enginn er loggaður inn er redirectað á login(ætti ekki að geta gerst)
+        * */
         try{
             parseUserData(json);
         }catch (JSONException e){
             Log.e(TAG, "JSON caught: ", e);
-            goToLogin();
         }
 
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
-
+    /*
+    *View búið til og Onclick listeners settir á takka.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        /*
+        * Viðmótsbreytur sóttar ásamt propertyID
+        * */
         View v = inflater.inflate(R.layout.fragment_make_offer, container, false);
         Button b = (Button) v.findViewById(R.id.makeOfferButtonID);
         final TextView noUser = (TextView) v.findViewById(R.id.noUser);
@@ -127,11 +102,15 @@ public class MakeOfferFragment extends Fragment {
         final String propertyIDdata = getArguments().getString("data");
         final Long propertyID = Long.parseLong(propertyIDdata);
         System.out.println(propertyID);
-
+        /*
+        * On click listener settur á button b sem sér um að búa til tilboð
+        * */
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                /*
+                * Notandi ætti að vera loggaður inn en alltaf gott að athuga aftur :P
+                * */
                 if(isLoggedIn()) {
                     System.out.println("Tilbod gert");
                     Random rand = new Random();
@@ -140,10 +119,14 @@ public class MakeOfferFragment extends Fragment {
                     System.out.println(offerAmount.getEditText().getText().toString());
                     String u = offerAmount.getEditText().getText().toString();
 
-
+                    /*
+                    * Kallað á fallið SaveOffer sem tengist bakenda og býr til offer í gagnagrunni.
+                    * */
                     SaveOffer(of, propertyIDdata, u);
-                    //Offer offer = new Offer(offerID,propertyID,u,userID);
-                    /*Congratulations birt a activity*/
+
+                    /*
+                    *Congratulations texti birt á PropertyActivity og MakeOfferFragment lokað
+                    */
                     PropertyActivity activity = (PropertyActivity) getActivity();
                     activity.makeOfferButton.isPressed();
                     activity.congratulations.setVisibility(View.VISIBLE);
@@ -156,11 +139,17 @@ public class MakeOfferFragment extends Fragment {
             }});
         return v;
     }
-        public void closeFragment() {
-            getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
-        }
 
-        /*Kallar á fallið SaveOffer2 í bakenda */
+    /*
+    * Fall sem lokar núverandi fragmenti
+    * */
+    public void closeFragment() {
+        getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+    }
+
+        /*
+        *Fall sem kallar á fallið SaveOffer í bakenda sem save-ar offer í gagnagrunn
+        */
         public void SaveOffer(String offerID,String propertyID,String upph){
             System.out.println(propertyID);
             System.out.println(upph);
@@ -191,27 +180,26 @@ public class MakeOfferFragment extends Fragment {
             });
         }
 
-    private boolean isNetworkAvailable() {
-        return true;
-    }
+
+    /*
+    * Athugar hvort notandi sé loggaður inn.
+    * Skilar true eða false.
+    * */
     private boolean isLoggedIn() {
 
-        String json = mPrefs.getString("LoggedInUser", "");
-        if(json==null){
+        if(user.getUserName()=="TempUser"){
             svar=false;
-
         }else{
             System.out.println("userinn er loggadur inn");
             svar=true;
         }
-
-
         return svar;
     }
+
+    /*
+    * Fall sem tekur inn streng á json formati og býr til user úr upplýsingunum.
+    * */
     private void parseUserData(String userData) throws JSONException {
-        if (userData == null){
-            goToMain();
-        }
         JSONObject jsonObk= new JSONObject(userData);
         JSONObject json = jsonObk.getJSONObject("user");
         System.out.println(json);
@@ -220,12 +208,5 @@ public class MakeOfferFragment extends Fragment {
                 json.get("userPassword").toString(),
                 json.get("userEmail").toString());
     }
-    private void goToMain(){
-        //Intent intent = new Intent(this, MainActivity.class);
-        //startActivity(intent);
-    }
-    private void goToLogin(){
-        //Intent intent = new Intent(this, LoginActivity.class);
-        //startActivity(intent);
-    }
+
 }
