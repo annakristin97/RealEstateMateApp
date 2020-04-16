@@ -122,6 +122,7 @@ public class MakeOfferFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_make_offer, container, false);
         Button b = (Button) v.findViewById(R.id.makeOfferButtonID);
         final TextView noUser = (TextView) v.findViewById(R.id.noUser);
+        final Button goToLogin = (Button) v.findViewById(R.id.goToLogin);
         final TextInputLayout offerAmount = (TextInputLayout) v.findViewById(R.id.OfferAmount);
         final String propertyIDdata = getArguments().getString("data");
         final Long propertyID = Long.parseLong(propertyIDdata);
@@ -145,10 +146,12 @@ public class MakeOfferFragment extends Fragment {
                     /*Congratulations birt a activity*/
                     PropertyActivity activity = (PropertyActivity) getActivity();
                     activity.makeOfferButton.isPressed();
+                    activity.congratulations.setVisibility(View.VISIBLE);
                     activity.congratulations.setText("Congratulations you have made an offer on this property!");
                     closeFragment();
                 }else{
                     noUser.setText("You have to be logged in to make a offer!");
+                    goToLogin.setVisibility(View.VISIBLE);
                 }
             }});
         return v;
@@ -192,47 +195,16 @@ public class MakeOfferFragment extends Fragment {
         return true;
     }
     private boolean isLoggedIn() {
-        //RequestBody formBody = new FormBody.Builder();
-        Request request = new Request.Builder()
-                .url("http://10.0.2.2:9090/isLoggedIn")
-                .build();
 
-        OkHttpClient client = new OkHttpClient();
-        Call call = client.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                System.out.println("bilad");
-            }
+        String json = mPrefs.getString("LoggedInUser", "");
+        if(json==null){
+            svar=false;
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                System.out.println("virkar");
-                svar = true;
-/*
-                try {
-                    String jsonData = response.body().string();
-                    Log.v(TAG, jsonData);
-                    if (response.isSuccessful()) {
-                        System.out.println("json data h'er");
-                        System.out.println(jsonData);
-                        System.out.println("json data h'er");
-                        JSONArray array=new JSONArray(jsonData);
-                        //JSONObject elem=(JSONObject)array.get(0);
-                        svar=true;
-                        //elem.getBoolean("");
+        }else{
+            System.out.println("userinn er loggadur inn");
+            svar=true;
+        }
 
-                    } else {
-                        //alertUserAboutError();
-                        svar=false;
-                    }
-                } catch (IOException e) {
-                    Log.e(TAG, "Exception caught: ", e);
-                } catch (JSONException e) {
-                    Log.e(TAG, "JSON caught: ", e);
-                }*/
-            }
-        });
 
         return svar;
     }

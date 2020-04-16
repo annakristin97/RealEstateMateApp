@@ -1,6 +1,8 @@
 package is.siggigauti.stormy.ui;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import is.siggigauti.stormy.R;
 import is.siggigauti.stormy.weather.Property;
+import is.siggigauti.stormy.weather.User;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -36,10 +40,18 @@ public class PropertyActivity extends AppCompatActivity {
     Button makeOfferButton;
 
     @BindView(R.id.congratulations) TextView congratulations;
+    @BindView(R.id.toLogin) Button toLogin;
+    @BindView(R.id.youHaveToLogIn)
+    TextView youHaveToLogIn;
 
     private Property property;
     public Long propertyID;
 
+    public static final String TAG = PropertyActivity.class.getSimpleName();
+    private User user;
+    private SharedPreferences mPrefs;
+    final String PREFERENCE_STRING = "LoggedInUser";
+    private int userID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +59,19 @@ public class PropertyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_property);
         ButterKnife.bind(this);
 
+        mPrefs =  getSharedPreferences(PREFERENCE_STRING, MODE_PRIVATE);
+        user = new User("TempUser", "temppass", "temp@mail.com");
+        String json = mPrefs.getString("LoggedInUser", "");
+        if (json == null)
+            System.out.println("hdfka;dflkajsf;lkajdsf;laksdjf;adslkfjas;lfkja;dlfkfjasf;l");
+        System.out.println(json);
+//                                User obj = gson.fromJson(json, MyObject.class);
+        try{
+            parseUserData(json);
+        }catch (JSONException e){
+            Log.e(TAG, "JSON caught: ", e);
+            goToLogin();
+        }
 
         String imageId1 = (String) getIntent().getSerializableExtra("image1");
         String url1 = "http://10.0.2.2:9090/Image/" + imageId1;
@@ -106,6 +131,24 @@ public class PropertyActivity extends AppCompatActivity {
                 // Do something in response to button click
                 System.out.println("ytt a make offer");
 
+                mPrefs =  getSharedPreferences(PREFERENCE_STRING, MODE_PRIVATE);
+                user = new User("TempUser", "temppass", "temp@mail.com");
+                String json = mPrefs.getString("LoggedInUser", "");
+               if(json==null){
+                //if(true){
+
+                    //congratulations.setText("You have to log in to make an offer");
+                   // congratulations.setTextColor(android.R.color.holo_red_light);
+                    //congratulations.setVisibility(View.VISIBLE);
+                    youHaveToLogIn.setVisibility(View.VISIBLE);
+                    toLogin.setVisibility(View.VISIBLE);
+                    toLogin.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                        goToLogin();
+                        }
+                        });
+                }else{
+
                 FragmentManager fm = getSupportFragmentManager();
                 MakeOfferFragment fragment =  new MakeOfferFragment();
                 Bundle data = new Bundle();//Use bundle to pass data
@@ -114,11 +157,32 @@ public class PropertyActivity extends AppCompatActivity {
 
                 fm.beginTransaction().replace(R.id.activity_container, fragment).commit();
 
-            }
+            }}
         });
 
 
 
+    }
+    private void parseUserData(String userData) throws JSONException {
+        if (userData == null){
+            goToMain();
+        }
+        JSONObject jsonObk= new JSONObject(userData);
+        JSONObject json = jsonObk.getJSONObject("user");
+        System.out.println(json);
+        userID = json.getInt("id");
+        user =  new User(userID, json.get("userName").toString(),
+                json.get("userPassword").toString(),
+                json.get("userEmail").toString());
+    }
+    private void goToLogin(){
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
+
+    private void goToMain(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
     
 }
