@@ -21,7 +21,9 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import is.siggigauti.stormy.R;
+import is.siggigauti.stormy.weather.FilteredOffers;
 import is.siggigauti.stormy.weather.FilteredProperties;
+import is.siggigauti.stormy.weather.Offer;
 import is.siggigauti.stormy.weather.Property;
 import is.siggigauti.stormy.weather.User;
 import okhttp3.Call;
@@ -33,10 +35,14 @@ import okhttp3.Response;
 public class UserHomeActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
     private FilteredProperties mFilteredProperties;
+    private FilteredOffers mFilteredOffers;
     private PropertyAdapter mAdapter;
+    private OfferAdapter mAdapter2;
     private User user;
     @BindView(R.id.propertyList)
     ListView mPropertyList;
+    @BindView(R.id.offerList)
+    ListView mOfferList;
     @BindView(R.id.usernameTextView)
     TextView mUserNameTextView;
 
@@ -48,6 +54,7 @@ public class UserHomeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         getSessionUser();
         getProperties();
+        getOffers();
         mUserNameTextView.setText(user.getUserName());
     }
 
@@ -72,6 +79,7 @@ public class UserHomeActivity extends AppCompatActivity {
 
         callBackend(request);
     }
+
     private boolean isNetworkAvailable() {
         ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
@@ -145,6 +153,10 @@ public class UserHomeActivity extends AppCompatActivity {
         mAdapter = new PropertyAdapter(this, mFilteredProperties.getProperties());
 
         mPropertyList.setAdapter(mAdapter);
+
+        mAdapter2 = new OfferAdapter(this, mFilteredOffers.getOffers());
+
+        mOfferList.setAdapter(mAdapter2);
     }
 
     private FilteredProperties parsePropertyListDetails(String jsonData) throws JSONException{
@@ -181,6 +193,27 @@ public class UserHomeActivity extends AppCompatActivity {
         filteredProperties.setProperties(properties);
 
         return filteredProperties;
+    }
+
+    private FilteredOffers parseOfferListDetails(String jsonData) throws JSONException{
+        FilteredOffers filteredOffers = new FilteredOffers();
+
+        ArrayList<Offer> offers =new ArrayList<Property>();
+        JSONArray array=new JSONArray(jsonData);
+        for(int i=0;i<array.length();i++){
+            JSONObject elem=(JSONObject)array.get(i);
+            if (elem.getLong("userID") == 1 ) {
+                Offer offer = new Offer(elem.getLong("offerID"),
+                        elem.getLong("propertyID"),
+                        elem.getLong("offerAmount"),
+                        elem.getLong("userID"));
+                offers.add(offer);
+            }
+        }
+
+        filteredOffers.setProperties(offers);
+
+        return filteredOffers;
     }
 
     private void parseUserData(String userData) throws JSONException {
