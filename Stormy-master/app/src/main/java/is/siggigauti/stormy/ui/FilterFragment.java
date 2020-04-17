@@ -2,7 +2,6 @@ package is.siggigauti.stormy.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +31,8 @@ public class FilterFragment extends Fragment {
         final Spinner mBathroomsFilter = (Spinner) v.findViewById(R.id.bathroomsFilter);
         final Spinner mSizeFilter = (Spinner) v.findViewById(R.id.sizeFilter);
         final Spinner mCategoryFilter = (Spinner) v.findViewById(R.id.categoryFilter);
+
+        //Sækja filtera úr spinnerum þegar ýtt er á "search"
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,6 +53,9 @@ public class FilterFragment extends Fragment {
         return v;
     }
 
+    /**
+     * Lokar fragment glugga
+     */
     public void closeFragment() {
         getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
     }

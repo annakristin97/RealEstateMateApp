@@ -14,9 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import is.siggigauti.stormy.R;
-import is.siggigauti.stormy.weather.Offer;
+import is.siggigauti.stormy.entities.Offer;
 
-
+/**
+ * Klasi sem hjálpar okkur að birta Offer listann snyrtilega á homepage með hjálp list_item_offer.xml skránnar
+ */
 public class OfferAdapter extends ArrayAdapter<Offer> {
 
     private Context mContext;

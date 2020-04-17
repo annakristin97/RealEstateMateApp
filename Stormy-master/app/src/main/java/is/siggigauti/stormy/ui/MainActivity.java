@@ -27,8 +27,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import is.siggigauti.stormy.R;
-import is.siggigauti.stormy.weather.FilteredProperties;
-import is.siggigauti.stormy.weather.Property;
+import is.siggigauti.stormy.entities.FilteredProperties;
+import is.siggigauti.stormy.entities.Property;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
     private FilteredProperties mFilteredProperties;
     private PropertyAdapter mAdapter;
-    //private LoginActivity LoginActivity;
     @BindView(R.id.propertyList)
     ListView mPropertyList;
     @BindView(R.id.filterButton)
@@ -57,8 +56,6 @@ public class MainActivity extends AppCompatActivity {
     Button logOutButton;
     private SharedPreferences mPrefs;
 
-    public boolean userLoggedIn;
-
     final String PREFERENCE_STRING = "LoggedInUser";
 
 
@@ -68,21 +65,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mPrefs =  getSharedPreferences(PREFERENCE_STRING, MODE_PRIVATE);
         ButterKnife.bind(this);
-        //Clear JSON file
-//Todo Finna leið til að keyra aðeins einu sinni í start af appi, eða þegar appið terminatest
-//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-//        System.out.println(!prefs.getBoolean("firstTime", false));
-//        System.out.println("Hellllllooooo!!!!");
-//        if(prefs.getBoolean("firstTime", false)) {
-//            // run your one time code
-//            System.out.println("Clear saved user preference");
-//            SharedPreferences.Editor prefsEditor = mPrefs.edit();
-//            prefsEditor.putString("LoggedInUser", null);
-//            prefsEditor.commit();
-//            SharedPreferences.Editor editor = prefs.edit();
-//            editor.putBoolean("firstTime", true);
-//            editor.commit();
-//        }
         logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         mFilterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,13 +118,15 @@ public class MainActivity extends AppCompatActivity {
                 List<Property> PropertyList = mFilteredProperties.getProperties();
                 Property property = PropertyList.get(i);
                 System.out.println(property.streetName);
-               // System.out.println(property.getPropertyID());
                 openPropertyPage(property);
             }
         });
-
     }
 
+    /**
+     * Opnar síðu sem inniheldur frekari upplýsingar um eign
+     * @param property
+     */
     private void openPropertyPage(Property property) {
         Intent intent =new Intent(this, PropertyActivity.class);
         intent.putExtra("propertyName", property.getStreetName());
@@ -161,16 +146,33 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
+
+    /**
+     * Opnar homepage fyrir notanda
+     */
     private void openUserHomePage() {
         Intent intent = new Intent(this, UserHomeActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Opnar login síðu
+     */
     private void openLoginPage() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Býr til request með filterum fyrir leit að eignum
+     * @param town
+     * @param zip
+     * @param bedrooms
+     * @param price
+     * @param size
+     * @param category
+     * @param bathrooms
+     */
     public void getFilteredProperties(String town, String zip, String bedrooms, String price, String size, String category, String bathrooms) {
 
             RequestBody formBody = new FormBody.Builder()
@@ -191,6 +193,9 @@ public class MainActivity extends AppCompatActivity {
             callBackend(request);
     }
 
+    /**
+     * Býr til request sem sækir allar eignir í gagnagrunni
+     */
     public void getProperties() {
             Request request = new Request.Builder()
                     .url("http://10.0.2.2:9090/seeAll")
@@ -198,20 +203,11 @@ public class MainActivity extends AppCompatActivity {
 
             callBackend(request);
     }
-    private void clearUser() {
-        System.out.println("Clear saved user preference");
-        SharedPreferences.Editor prefsEditor = mPrefs.edit();
-        prefsEditor.putString("LoggedInUser", null);
-        prefsEditor.commit();
-    }
-    public void getUsers() {
-        Request request = new Request.Builder()
-                .url("http://10.0.2.2:9090/getAllUsers")
-                .build();
 
-        callBackend(request);
-    }
-
+    /**
+     * Kallar á bakenda með requesti
+     * @param request
+     */
     private void callBackend(Request request){
             OkHttpClient client = new OkHttpClient();
 
@@ -261,12 +257,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Uppfærir listann yfir eignir á upphafssíðu
+     */
     private void updateDisplay() {
         mAdapter = new PropertyAdapter(this, mFilteredProperties.getProperties());
 
         mPropertyList.setAdapter(mAdapter);
     }
 
+    /**
+     * Býr til tilvik af FilteredProperties sem geymir upplýsingar um "núverandi" eignir sem eru birtar út frá gögnum frá bakenda
+     * @param jsonData
+     * @return
+     * @throws JSONException
+     */
     private FilteredProperties parsePropertyListDetails(String jsonData) throws JSONException{
 
         FilteredProperties filteredProperties = new FilteredProperties();
@@ -302,6 +307,10 @@ public class MainActivity extends AppCompatActivity {
         return filteredProperties;
     }
 
+    /**
+     * Athugar hvort network sé aðgengilegt
+     * @return
+     */
     private boolean isNetworkAvailable() {
         ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
@@ -310,6 +319,9 @@ public class MainActivity extends AppCompatActivity {
         return isAvailable;
     }
 
+    /**
+     * Upplýsir notanda ef um villu er að ræða
+     */
     private void alertUserAboutError() {
         AlertDialogFragment dialog = new AlertDialogFragment();
         dialog.show(getFragmentManager(), "error_dialog");

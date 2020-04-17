@@ -18,7 +18,7 @@ import java.io.IOException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import is.siggigauti.stormy.R;
-import is.siggigauti.stormy.weather.User;
+import is.siggigauti.stormy.entities.User;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -30,9 +30,7 @@ import okhttp3.Response;
 public class LoginActivity extends AppCompatActivity {
 
 
-    private MainActivity mainActivity;
-
-
+    final String PREFERENCE_STRING = "LoggedInUser";
     @BindView(R.id.signUpButton)
     Button signUpButton;
     @BindView((R.id.loginButton))
@@ -41,15 +39,14 @@ public class LoginActivity extends AppCompatActivity {
     EditText userNameInput;
     @BindView((R.id.userPassword_input))
     EditText userPasswordInput;
+    private MainActivity mainActivity;
     private SharedPreferences mPrefs;
-    final String PREFERENCE_STRING = "LoggedInUser";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-//        mPrefs =  getPreferences(MODE_PRIVATE);
         mPrefs =  getSharedPreferences(PREFERENCE_STRING, MODE_PRIVATE);
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
@@ -65,11 +62,13 @@ public class LoginActivity extends AppCompatActivity {
                 loginUser(userNameInput.getText().toString(), userPasswordInput.getText().toString());
             }
         });
-//        userName = (EditText) findViewById(R.id.userName_input);
-//        userPassword = (EditText) findViewById(R.id.userPassword_input);
-
     }
 
+    /**
+     * Býr til request með notendanafni, pw og email og kallar á callBackend með því
+     * @param userName
+     * @param password
+     */
     private void loginUser(String userName, String password) {
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Logging In!");
@@ -88,6 +87,10 @@ public class LoginActivity extends AppCompatActivity {
         callBackend(request);
     }
 
+    /**
+     * Kallar á bakenda til þess að skrá notanda inn
+     * @param request
+     */
     private void callBackend(Request request){
         OkHttpClient client = new OkHttpClient();
         Call call = client.newCall(request);
@@ -124,6 +127,12 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Býr til User entity og skilar út frá gögnum sem fengust eftir kall í bakenda
+     * @param userData
+     * @return
+     * @throws JSONException
+     */
     private User parseUserData(String userData) throws JSONException {
         JSONObject jsonObk= new JSONObject(userData);
 
@@ -137,6 +146,9 @@ public class LoginActivity extends AppCompatActivity {
                 json.get("userEmail").toString());
     }
 
+    /**
+     * Sendir mann á signup síðuna
+     */
     private void openSignUpPage() {
         System.out.println("sjomli þú ýttir á signup");
         Intent intent = new Intent(this, SignUpActivity.class);
@@ -144,6 +156,10 @@ public class LoginActivity extends AppCompatActivity {
         //mainActivity.getUsers();
 
     }
+
+    /**
+     * Sendir mann á upphafssíðu
+     */
     private void goToMain(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

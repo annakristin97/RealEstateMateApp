@@ -16,7 +16,7 @@ import java.io.IOException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import is.siggigauti.stormy.R;
-import is.siggigauti.stormy.weather.User;
+import is.siggigauti.stormy.entities.User;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -36,9 +36,6 @@ public class SignUpActivity extends AppCompatActivity {
     EditText passwordInput;
     @BindView(R.id.input_reEnterPassword)
     EditText rePasswordInput;
-
-    private MainActivity mainActivity;
-    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,10 +61,6 @@ public class SignUpActivity extends AppCompatActivity {
                 User newUser = new User(username, rePass, email);
                 saveUser(newUser);
 
-                // Kallar í userJson til að fá json-skrá með uppl. um user
-                // JSONObject userJson = getUserJson(newUser);
-
-
                 // Búið að búa til account og notandi fluttur yfir á login page
                 goToLoginPage();
             }
@@ -77,6 +70,10 @@ public class SignUpActivity extends AppCompatActivity {
         );
     }
 
+    /**
+     * Býr til request með upplýsingum um nýjan notanda
+     * @param newUser
+     */
     private void saveUser(User newUser) {
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Býr til notanda fyrir þig");
@@ -95,6 +92,10 @@ public class SignUpActivity extends AppCompatActivity {
         callBackend(request);
     }
 
+    /**
+     * Kallar í bakenda til að vista nýjan user
+     * @param request
+     */
     private void callBackend(Request request){
         OkHttpClient client = new OkHttpClient();
         Call call = client.newCall(request);
@@ -111,28 +112,13 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Færir okkur yfir á loginpage
+     */
     private void goToLoginPage() {
         System.out.println("Notandi fluttur yfir á login page");
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
-    }
-
-    /**
-     *
-     * @param user
-     * @return json file with user info
-     */
-    public static JSONObject getUserJson(User user) {
-        JSONObject json = new JSONObject();
-        try {
-            json.put("userName", user.getUserName());
-            json.put("userPass", user.getUserPassword());
-            json.put("userEmail", user.getUserEmail());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return json;
     }
 }
 

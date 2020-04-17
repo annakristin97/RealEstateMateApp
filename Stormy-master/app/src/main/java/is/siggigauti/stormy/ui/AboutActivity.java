@@ -19,7 +19,7 @@ public class AboutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_about);
     }
     public void goHomeAgain(View view){
-//        Go back to homepage
+        //Go back to homepage
         Intent intent = new Intent(AboutActivity.this, MainActivity.class);
         startActivity(intent);
     }

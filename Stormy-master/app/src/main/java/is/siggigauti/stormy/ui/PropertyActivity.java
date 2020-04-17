@@ -1,52 +1,31 @@
 package is.siggigauti.stormy.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import is.siggigauti.stormy.R;
-import is.siggigauti.stormy.weather.Property;
-import is.siggigauti.stormy.weather.User;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import is.siggigauti.stormy.entities.User;
 
 public class PropertyActivity extends AppCompatActivity {
 
-    /*
-    * Breytur fyrir viðmót
-    * */
     @BindView(R.id.makeOfferButton) Button makeOfferButton;
     @BindView(R.id.congratulations) TextView congratulations;
     @BindView(R.id.toLogin) Button toLogin;
     @BindView(R.id.youHaveToLogIn) TextView youHaveToLogIn;
 
-    /*
-    * Breytur fyrir bakenda
-    * */
     public Long propertyID;
     public static final String TAG = PropertyActivity.class.getSimpleName();
     private User user;
@@ -60,9 +39,7 @@ public class PropertyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_property);
         ButterKnife.bind(this);
 
-        /*
-        * Náð í upplýsingar úr sharedPrefrences og prufu user búinn til
-        * */
+        //Náð í upplýsingar úr sharedPrefrences og prufu user búinn til
         mPrefs =  getSharedPreferences(PREFERENCE_STRING, MODE_PRIVATE);
         user = new User("TempUser", "temppass", "temp@mail.com");
         String json = mPrefs.getString("LoggedInUser", "");
@@ -70,16 +47,14 @@ public class PropertyActivity extends AppCompatActivity {
         /*
          * Reynt að breyta upplýsingunum yfir í user hlut með fallinu parseUseData(json).
          * Ekkert gert ef það virkar ekki.
-         * */
+         */
         try{
             parseUserData(json);
         }catch (JSONException e){
             Log.e(TAG, "JSON caught: ", e);
         }
 
-        /*
-         * Takkinn toLogin gerður visible en breytt í home takka og vísar á MainActivity.
-         * */
+        // Takkinn toLogin gerður visible en breytt í home takka og vísar á MainActivity.
         toLogin.setVisibility(View.VISIBLE);
         toLogin.setText("Home");
         toLogin.setOnClickListener(new View.OnClickListener() {
@@ -88,9 +63,7 @@ public class PropertyActivity extends AppCompatActivity {
             }
         });
 
-        /*
-        * Myndir sóttar úr intent og url-in sett í strengjafylki
-        * */
+        // Myndir sóttar úr intent og url-in sett í strengjafylki
         String imageId1 = (String) getIntent().getSerializableExtra("image1");
         String url1 = "http://10.0.2.2:9090/Image/" + imageId1;
         String imageId2 = (String) getIntent().getSerializableExtra("image2");
@@ -100,16 +73,12 @@ public class PropertyActivity extends AppCompatActivity {
         System.out.println(url1);
         String[] imageUrls = new String[]{url1,url2,url3};
 
-        /*
-         * Myndirnar settar inn í viewPager í viðmóti svo hægt sé að skrolla í gegnum þær
-         * */
+        // Myndirnar settar inn í viewPager í viðmóti svo hægt sé að skrolla í gegnum þær
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         ViewPagerAdapter adapter = new ViewPagerAdapter(this, imageUrls);
         viewPager.setAdapter(adapter);
 
-        /*
-         * Upplýsingar um eign sóttar úr intent
-         * */
+        //Upplýsingar um eign sóttar í Intent
         propertyID = (Long) getIntent().getSerializableExtra("propertyID");
         String propertyName = (String) getIntent().getSerializableExtra("propertyName");
         String propertyNumber = (String) getIntent().getSerializableExtra("propertyNumber");
@@ -133,15 +102,13 @@ public class PropertyActivity extends AppCompatActivity {
         prizetext.setText(prizet);
 
 
-        //Upplýsingar í töflu
+        // Upplýsingar í töflu
         Long size =  (Long) getIntent().getSerializableExtra("size");
         Long bathrooms =  (Long) getIntent().getSerializableExtra("bathrooms");
         Long rooms =  (Long) getIntent().getSerializableExtra("rooms");
         String type = (String) getIntent().getSerializableExtra("type");
 
-        /*
-         * Viðmót fyllt út með viðeigandi breytum
-         * */
+        // Fyllt út í viðmót
         TextView sizetext = (TextView) findViewById(R.id.sizetext);
         String sizet = size.toString() + " m^2";
         sizetext.setText(sizet);
@@ -152,10 +119,10 @@ public class PropertyActivity extends AppCompatActivity {
         TextView typetext = (TextView) findViewById(R.id.typetext);
         typetext.setText(type);
 
-        /*Þegar ýtt er á makeOfferButton
+        /* Þegar ýtt er á makeOfferButton..
         *
-        *Notandi loggaður inn:
-        *Kallað á MakeOfferFragment og propertyID sett í bundle með
+        * Notandi loggaður inn:
+        * Kallað á MakeOfferFragment og propertyID sett í bundle með
         *
         * Notandi ekki loggaður inn:
         * Button toLogin breytist úr 'Home' í 'Sign in' og vísar á Login Activity og
@@ -189,7 +156,7 @@ public class PropertyActivity extends AppCompatActivity {
                 /*
                 * Ef userinn heitir enn TempUser þá er notandi loggaður út.
                 * Ef hann er ekki TempUser þá er notandi loggaður inn og MakeOfferFragment opnað.
-                * */
+                */
                 if(user.getUserName() != "TempUser") {
                     FragmentManager fm = getSupportFragmentManager();
                     MakeOfferFragment fragment = new MakeOfferFragment();
@@ -203,9 +170,11 @@ public class PropertyActivity extends AppCompatActivity {
         });
     }
 
-    /*
-    * Streng úr sharedPrefrences breytt í notanda.
-    * */
+    /**
+     * Streng úr sharedPrefrences breytt í notanda.
+     * @param userData
+     * @throws JSONException
+     */
     private void parseUserData(String userData) throws JSONException {
         if (userData == null){
             goToMain();
@@ -219,17 +188,17 @@ public class PropertyActivity extends AppCompatActivity {
                 json.get("userEmail").toString());
     }
 
-    /*
-    * Opnar LoginActivity
-    * */
+    /**
+     * Opnar LoginActivity
+     */
     private void goToLogin(){
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 
-    /*
-    * Opnar MainActivity
-    * */
+    /**
+     * Opnar MainActivity
+     */
     private void goToMain(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

@@ -22,11 +22,11 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import is.siggigauti.stormy.R;
-import is.siggigauti.stormy.weather.FilteredOffers;
-import is.siggigauti.stormy.weather.FilteredProperties;
-import is.siggigauti.stormy.weather.Offer;
-import is.siggigauti.stormy.weather.Property;
-import is.siggigauti.stormy.weather.User;
+import is.siggigauti.stormy.entities.FilteredOffers;
+import is.siggigauti.stormy.entities.FilteredProperties;
+import is.siggigauti.stormy.entities.Offer;
+import is.siggigauti.stormy.entities.Property;
+import is.siggigauti.stormy.entities.User;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -40,15 +40,17 @@ public class UserHomeActivity extends AppCompatActivity {
     private PropertyAdapter mAdapter;
     private OfferAdapter mAdapter2;
     private User user;
+    private SharedPreferences mPrefs;
+    final String PREFERENCE_STRING = "LoggedInUser";
+    private int userID = 0;
+
     @BindView(R.id.propertyList)
     ListView mPropertyList;
     @BindView(R.id.offerList)
     ListView mOfferList;
     @BindView(R.id.usernameTextView)
     TextView mUserNameTextView;
-    private SharedPreferences mPrefs;
-    final String PREFERENCE_STRING = "LoggedInUser";
-    private int userID = 0;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,25 +60,22 @@ public class UserHomeActivity extends AppCompatActivity {
         if (json == null)
             System.out.println("hdfka;dflkajsf;lkajdsf;laksdjf;adslkfjas;lfkja;dlfkfjasf;l");
         System.out.println(json);
-//                                User obj = gson.fromJson(json, MyObject.class);
         try{
             parseUserData(json);
         }catch (JSONException e){
             Log.e(TAG, "JSON caught: ", e);
             goToLogin();
         }
-//        User blaUser = new Gson().fromJson(json, User.class);
 
         setContentView(R.layout.activity_userhome);
         ButterKnife.bind(this);
-//        getSessionUser();
         getProperties();
         getOffers();
         mUserNameTextView.setText(user.getUserName());
     }
 
     /**
-     *
+     * Býr til request til þess að sækja núverandi logged in user
      */
     private void getSessionUser(){
         Request request = new Request.Builder()
@@ -87,7 +86,7 @@ public class UserHomeActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * Býr til request til þess að sækja allar eignir í gagnagrunn
      */
     private void getProperties() {
         Request request = new Request.Builder()
@@ -97,6 +96,9 @@ public class UserHomeActivity extends AppCompatActivity {
         callBackend(request);
     }
 
+    /**
+     * Býr til request til þess að sækja öll offer í gagnagrunn
+     */
     private void getOffers() {
         Request request = new Request.Builder()
                 .url("http://10.0.2.2:9090/Offers")
@@ -105,6 +107,10 @@ public class UserHomeActivity extends AppCompatActivity {
         callBackendOffers(request);
     }
 
+    /**
+     * Athugar hvort network sé aðgengilegt
+     * @return
+     */
     private boolean isNetworkAvailable() {
         ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
@@ -113,13 +119,16 @@ public class UserHomeActivity extends AppCompatActivity {
         return isAvailable;
     }
 
+    /**
+     * Upplýsir notanda ef um villu er að ræða
+     */
     private void alertUserAboutError() {
         AlertDialogFragment dialog = new AlertDialogFragment();
         dialog.show(getFragmentManager(), "error_dialog");
     }
 
     /**
-     *
+     * Kallar á bakenda með request til þess að sækja lista yfir eignir núverandi logged in notanda
      * @param request
      */
     private void callBackend(Request request){
@@ -173,6 +182,10 @@ public class UserHomeActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Kallar á bakenda til þess að sækja upplýsingar um tilboð sem núverandi notandi hefur gert
+     * @param request
+     */
     private void callBackendOffers(Request request){
         OkHttpClient client = new OkHttpClient();
 
@@ -224,6 +237,9 @@ public class UserHomeActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Uppfærir property og offer listview-in
+     */
     private void updateDisplay() {
         mAdapter = new PropertyAdapter(this, mFilteredProperties.getProperties());
 
@@ -234,6 +250,12 @@ public class UserHomeActivity extends AppCompatActivity {
         mOfferList.setAdapter(mAdapter2);
     }
 
+    /**
+     * Býr til tilvik af FilteredProperties sem geymir upplýsingar um "núverandi" eignir sem eru birtar út frá gögnum frá bakenda
+     * @param jsonData
+     * @return
+     * @throws JSONException
+     */
     private FilteredProperties parsePropertyListDetails(String jsonData) throws JSONException{
         FilteredProperties filteredProperties = new FilteredProperties();
 
@@ -270,6 +292,12 @@ public class UserHomeActivity extends AppCompatActivity {
         return filteredProperties;
     }
 
+    /**
+     * Býr til tilvik af FilteredOffers sem geymir upplýsingar um hvaða tilboð notandinn er skráður fyrir út frá gögnum frá bakenda
+     * @param jsonData
+     * @return
+     * @throws JSONException
+     */
     private FilteredOffers parseOfferListDetails(String jsonData) throws JSONException{
         FilteredOffers filteredOffers = new FilteredOffers();
 
@@ -292,6 +320,11 @@ public class UserHomeActivity extends AppCompatActivity {
         return filteredOffers;
     }
 
+    /**
+     * Býr til tilvik af user út frá gögnum frá bakenda
+     * @param userData
+     * @throws JSONException
+     */
     private void parseUserData(String userData) throws JSONException {
         if (userData == null){
             goToMain();
@@ -304,11 +337,18 @@ public class UserHomeActivity extends AppCompatActivity {
                 json.get("userPassword").toString(),
                 json.get("userEmail").toString());
     }
+
+    /**
+     * Færir okkur yfir á login page
+     */
     private void goToLogin(){
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Færir okkur yfir á upphafssíðu
+     */
     private void goToMain(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

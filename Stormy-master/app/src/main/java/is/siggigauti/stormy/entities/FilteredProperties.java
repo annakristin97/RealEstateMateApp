@@ -1,4 +1,4 @@
-package is.siggigauti.stormy.weather;
+package is.siggigauti.stormy.entities;
 
 import java.util.List;
 

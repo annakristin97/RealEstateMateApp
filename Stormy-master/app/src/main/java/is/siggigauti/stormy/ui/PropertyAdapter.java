@@ -17,9 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import is.siggigauti.stormy.R;
-import is.siggigauti.stormy.weather.Property;
+import is.siggigauti.stormy.entities.Property;
 
-
+/**
+ * Klasi sem hjálpar okkur að birta Property listann snyrtilega á homepage og upphafssíðu með hjálp list_item.xml skránnar
+ */
 public class PropertyAdapter extends ArrayAdapter<Property> {
 
     private Context mContext;
