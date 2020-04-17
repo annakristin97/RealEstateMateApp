@@ -8,10 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,17 +33,14 @@ public class OfferAdapter extends ArrayAdapter<Offer> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View listItem = convertView;
         if(listItem == null)
-            listItem = LayoutInflater.from(mContext).inflate(R.layout.list_item,parent,false);
+            listItem = LayoutInflater.from(mContext).inflate(R.layout.list_item_offer,parent,false);
 
         Offer currentOffer = offersList.get(position);
 
-        TextView name = (TextView) listItem.findViewById(R.id.textView_name);
+        TextView name = (TextView) listItem.findViewById(R.id.textView_propertyid);
         name.setText("Property ID: " + String.valueOf(currentOffer.getPropertyID()));
 
-        TextView size = (TextView) listItem.findViewById(R.id.textView_size);
-        size.setText("");
-
-        TextView price = (TextView) listItem.findViewById(R.id.textView_price);
+        TextView price = (TextView) listItem.findViewById(R.id.textView_amount);
         price.setText("Offer Amount: " + String.valueOf(currentOffer.getOfferAmount()));
 
         return listItem;
